@@ -4,7 +4,8 @@ from jwt_utils import *
 app = Flask(__name__)
 CORS(app)
 
-from my_sql_process import Database
+from my_sql_process import *
+from Question import *
 
 bdd = Database('database.db')
 
@@ -34,6 +35,8 @@ def ProcessQuestions():
     # On Récupère le token envoyé en paramètre
 	auth = request.headers.get('Authorization')
 
+	print("AAAA", auth)
+
 	auth_token = auth.split(' ')[1]
 
 	# Si aucun token n'est envoyé, c'est qu'il y a une erreur 
@@ -47,12 +50,13 @@ def ProcessQuestions():
 
 	# Si c'est vraiment le bon token, on peut ajouter la question à notre BDD et retourner l'id de la question
 	else:
-		my_question = request.get_json()
+		my_question = Question()
+		my_question.to_python(request.get_json())
+
 		id = bdd.addQuestion(my_question)
 
 	return str(id), 200
 
-	
 	
 
 if __name__ == "__main__":
