@@ -134,3 +134,28 @@ class Database:
             return None
 
         return number[0]
+
+    
+    def deleteAllParticipations(self):
+        query = "DELETE FROM participations"
+        self.cur.execute(query)
+        self.con.commit()
+
+    def getAllParticipations(self):
+        query = "SELECT * FROM participations"
+        self.cur.execute(query)
+        participations = self.cur.fetchall()
+
+        if participations is None:
+            return []
+
+        all_participations = self.allParticipationsToJson(participations)
+
+        return all_participations
+
+    def allParticipationsToJson(self, participations):
+        return [{
+            "date": participation[1],
+            "playerName": participation[2],
+            "score": participation[3]
+        } for participation in participations]

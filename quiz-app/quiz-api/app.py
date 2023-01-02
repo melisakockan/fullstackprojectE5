@@ -32,8 +32,10 @@ def hello_world():
 @app.route('/quiz-info', methods=['GET'])
 def GetQuizInfo():
 	number_of_questions = bdd.getNumberOfQuestions()
+
+	all_participations = bdd.getAllParticipations()
 	
-	return {"size": number_of_questions, "scores": []}, 200
+	return {"size": number_of_questions, "scores": all_participations}, 200
 
 @app.route('/login', methods=['POST']) #ceci est un nouveau endpoint
 def Authentification():
@@ -49,7 +51,7 @@ def Authentification():
 
 
 @app.route('/questions', methods=['POST', 'GET'])
-def ProcessQuestions():
+def process_questions_1():
     	
 	if request.method == 'POST':
 			
@@ -88,14 +90,12 @@ def ProcessQuestions():
 
 		return question.to_json(), 200
 
-
-
 	else:
 		return 'Unauthorized', 401
 
 
 @app.route('/questions/<id>', methods=['GET', 'PUT', 'DELETE'])
-def Process(id):
+def process_questions_2(id):
     
 	if id == "all" and request.method == 'DELETE':
 		# On Récupère le token envoyé en paramètre
@@ -165,6 +165,21 @@ def Process(id):
 
 			return 'OK', 204
 
+
+
+@app.route('/participations/<id>', methods=['DELETE'])
+def process_participations(id):
+    
+	if id == "all" and request.method == 'DELETE':
+    		# On Récupère le token envoyé en paramètre
+		auth = request.headers.get('Authorization')
+
+		if not check_auth(auth):
+			return 'Unauthorized', 401
+
+		else:
+			bdd.deleteAllParticipations()
+			return 'All questions deleted', 204
 
 
 
