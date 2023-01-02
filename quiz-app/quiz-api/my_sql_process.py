@@ -110,7 +110,7 @@ class Database:
         self.cur.execute(query, (position,))
         self.con.commit()
 
-    def offsetExistingPosition(self, old_position, new_position):
+    def offsetUpdatePosition(self, old_position, new_position):
         if old_position < new_position:
             query = "UPDATE questions SET position = position - 1 WHERE position > ? AND position <= ?"
             self.cur.execute(query, (old_position, new_position))
@@ -119,3 +119,8 @@ class Database:
             self.cur.execute(query, (new_position, old_position))
         self.con.commit()
   
+
+    def offsetDeletePosition(self, position):
+        query = "UPDATE questions SET position = position - 1 WHERE position > ?"
+        self.cur.execute(query, (position,))
+        self.con.commit()

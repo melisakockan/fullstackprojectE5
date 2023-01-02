@@ -133,7 +133,7 @@ def Process(id):
 			new_question.to_python(request.get_json())
 
 			if new_question.position != question.position:
-				bdd.offsetExistingPosition(question.position, new_question.position)
+				bdd.offsetUpdatePosition(question.position, new_question.position)
 
 			# On supprime les anciennes réponses
 			bdd.deleteAnswers(id)
@@ -157,6 +157,9 @@ def Process(id):
 		else: # On est bien authentifié
 			bdd.deleteQuestion(id)
 			bdd.deleteAnswers(id)
+
+			position = question.position
+			bdd.offsetDeletePosition(position)
 
 			return 'OK', 204
 
