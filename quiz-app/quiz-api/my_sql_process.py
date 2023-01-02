@@ -84,6 +84,11 @@ class Database:
         self.cur.execute(query, (question_id,))
         self.con.commit()
 
+    def deleteQuestion(self, id):
+        query = "DELETE FROM questions WHERE id = ?"
+        self.cur.execute(query, (id,))
+        self.con.commit()
+
     def updateQuestion(self, question, id):
         query = "UPDATE questions SET position = ?, title = ?, text = ?, image = ? WHERE id = ?"
         self.cur.execute(query, (question.position, question.title, question.text, question.image, id))

@@ -72,9 +72,13 @@ def ProcessQuestions():
 	elif request.method == 'GET':
 		position = request.args.get('position')
 		if position is None:
-			return 'Unauthorized', 401
+			return 'Incorrect position', 404
 		
 		question = bdd.getQuestionByPosition(position)
+
+		if question is None:
+			return 'Position does not exist', 404
+
 		return question.to_json(), 200
 
 
@@ -83,20 +87,22 @@ def ProcessQuestions():
 		return 'Unauthorized', 401
 
 
-@app.route('/questions/<id>', methods=['GET', 'PUT'])
+@app.route('/questions/<id>', methods=['GET', 'PUT', 'DELETE'])
 def Process(id):
     	
 	# If id is not an integer
 	if not id.isdigit():
 			return 'Incorrect ID', 401
+
+	question = bdd.getQuestionById(id)
+
+	if question is None:
+		return 'ID does not exist', 404
+
     	
 	if request.method == 'GET':
 
-
-		question = bdd.getQuestionById(id)
-
-		if question is None:
-			return 'ID does not exist', 401
+		
 
 		return question.to_json(), 200
 
@@ -108,12 +114,7 @@ def Process(id):
 			return 'Unauthorized', 401
 
 		else: # On est bien authentifié
-			# On récupère la question à modifier
-			question = bdd.getQuestionById(id)
-
-			if question is None:
-				return 'ID does not exist', 401
-
+			# On récupère la nouvelle question
 			new_question = Question()
 			new_question.to_python(request.get_json())
 
@@ -132,6 +133,19 @@ def Process(id):
 
 			# On met à jour la question
 			bdd.updateQuestion(question, id)
+
+			return 'OK', 204
+
+	elif request.method == 'DELETE':
+		# On Récupère le token envoyé en paramètre
+		auth = request.headers.get('Authorization')
+
+		if not check_auth(auth):
+			return 'Unauthorized', 401
+
+		else: # On est bien authentifié
+			bdd.deleteQuestion(id)
+			bdd.deleteAnswers(id)
 
 			return 'OK', 204
 
