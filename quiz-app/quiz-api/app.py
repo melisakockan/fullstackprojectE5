@@ -6,6 +6,7 @@ CORS(app)
 
 from my_sql_process import *
 from Question import *
+from Participation import *
 
 
 bdd = Database('database.db')
@@ -168,7 +169,7 @@ def process_questions_2(id):
 
 
 @app.route('/participations/<id>', methods=['DELETE'])
-def process_participations(id):
+def process_participations_1(id):
     
 	if id == "all" and request.method == 'DELETE':
     		# On Récupère le token envoyé en paramètre
@@ -181,6 +182,37 @@ def process_participations(id):
 			bdd.deleteAllParticipations()
 			return 'All questions deleted', 204
 
+
+@app.route('/participations', methods=['POST'])
+def process_participations_2():
+    	
+	if request.method == 'POST':
+		participation = Participation()
+		participation.to_python(request.get_json())
+
+		all_questions = bdd.getAllQuestions()
+
+		all_q = []
+
+		for question in all_questions:
+			q = Question()
+			q.to_python(question)
+			all_q.append(q)
+
+
+		
+
+		participation.compute_score(all_q)
+
+		if participation.score is None:
+			return 'Error when computing score', 400
+
+		bdd.addParticipation(participation)
+
+		result = participation.to_json()
+	
+
+		return result, 200
 
 
 if __name__ == "__main__":

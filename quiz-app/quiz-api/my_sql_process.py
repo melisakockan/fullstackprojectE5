@@ -159,3 +159,38 @@ class Database:
             "playerName": participation[2],
             "score": participation[3]
         } for participation in participations]
+
+
+    def addParticipation(self, participation):
+        query = "INSERT INTO participations (date, player_name, score) VALUES (?, ?, ?)"
+        self.cur.execute(query, (participation.date, participation.playerName, participation.score))
+        self.con.commit()
+
+    def getAllQuestions(self):
+        query = "SELECT * FROM questions"
+        self.cur.execute(query)
+        questions = self.cur.fetchall()
+
+        if questions is None:
+            return []
+
+        all_questions = self.allQuestionsToJson(questions)
+
+        for question in all_questions:
+            id = question["id"]
+            query = "SELECT * FROM answers WHERE question_id = ?"
+            self.cur.execute(query, (id,))
+            answers = self.cur.fetchall()
+
+            question["possibleAnswers"] = [self.answer_to_json(answer) for answer in answers]
+
+        return all_questions
+
+    def allQuestionsToJson(self, questions):
+        return [{
+            "id": question[0],
+            "position": question[1],
+            "title": question[2],
+            "text": question[3],
+            "image": question[4]
+        } for question in questions]
