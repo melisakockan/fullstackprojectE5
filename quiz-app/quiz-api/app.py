@@ -22,7 +22,9 @@ def GetQuizInfo():
 @app.route('/login', methods=['POST']) #ceci est un nouveau endpoint
 def Authentification():
 	payload = request.get_json()
-	if payload['password']=='flask2023': #Si le mot de passe est le bon
+	if payload is None:
+		return 'Unauthorized', 401
+	elif payload['password']=='flask2023': #Si le mot de passe est le bon
 		token_built=build_token() #On génère et retourne un token à partir du mdp
 		token={'token':token_built}
 		return token 
@@ -30,36 +32,47 @@ def Authentification():
 		return 'Unauthorized', 401 #Sinon, retourner une erreur 401
 
 
-@app.route('/questions', methods=['POST'])
+@app.route('/questions', methods=['POST', 'GET'])
 def ProcessQuestions():
     	
-    # On Récupère le token envoyé en paramètre
-	auth = request.headers.get('Authorization')
+	if request.method == 'POST':
+			
+		# On Récupère le token envoyé en paramètre
+		auth = request.headers.get('Authorization')
 
-	# Si aucun token n'est envoyé, c'est qu'il y a une erreur 
-	if auth is None:
-		return 'Unauthorized', 401
+		# Si aucun token n'est envoyé, c'est qu'il y a une erreur 
+		if auth is None:
+			return 'Unauthorized', 401
 
-	auth_token = auth.split(' ')[1]
+		auth_token = auth.split(' ')[1]
 
-	# Si on a reçu un token, on le décode pour vérifier qu'il s'agit du bon
-	decode = decode_token(auth_token)
-	if decode != 'quiz-app-admin':
-		return 'Unauthorized', 401
+		# Si on a reçu un token, on le décode pour vérifier qu'il s'agit du bon
+		decode = decode_token(auth_token)
+		if decode != 'quiz-app-admin':
+			return 'Unauthorized', 401
 
-	# Si c'est vraiment le bon token, on peut ajouter la question à notre BDD et retourner l'id de la question
+		# Si c'est vraiment le bon token, on peut ajouter la question à notre BDD et retourner l'id de la question
+		else:
+			my_question = Question()
+			my_question.to_python(request.get_json())
+
+			id = bdd.addQuestion(my_question)
+
+			for answer in my_question.answers:
+				bdd.addAnswer(answer, id)
+
+		return str(id), 200
+
 	else:
-		my_question = Question()
-		my_question.to_python(request.get_json())
+		return 'Unauthorized', 401
 
-		id = bdd.addQuestion(my_question)
 
-		for answer in my_question.answers:
-			bdd.addAnswer(answer, id)
+@app.route('/questions/<id>', methods=['GET'])
+def GetQuestion(id):
+	question = bdd.getQuestion(id)
+	return question.to_json(), 200
 
-	return str(id), 200
 
-	
 
 if __name__ == "__main__":
     app.run(debug=True)
