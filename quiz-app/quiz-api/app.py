@@ -31,7 +31,9 @@ def hello_world():
 
 @app.route('/quiz-info', methods=['GET'])
 def GetQuizInfo():
-	return {"size": 0, "scores": []}, 200
+	number_of_questions = bdd.getNumberOfQuestions()
+	
+	return {"size": number_of_questions, "scores": []}, 200
 
 @app.route('/login', methods=['POST']) #ceci est un nouveau endpoint
 def Authentification():

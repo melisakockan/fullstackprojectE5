@@ -124,3 +124,13 @@ class Database:
         query = "UPDATE questions SET position = position - 1 WHERE position > ?"
         self.cur.execute(query, (position,))
         self.con.commit()
+
+    def getNumberOfQuestions(self):
+        query = "SELECT COUNT(*) FROM questions"
+        self.cur.execute(query)
+        number = self.cur.fetchone()
+
+        if number is None:
+            return None
+
+        return number[0]
