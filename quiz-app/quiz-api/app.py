@@ -35,14 +35,12 @@ def ProcessQuestions():
     # On Récupère le token envoyé en paramètre
 	auth = request.headers.get('Authorization')
 
-	print("AAAA", auth)
+	# Si aucun token n'est envoyé, c'est qu'il y a une erreur 
+	if auth is None:
+		return 'Unauthorized', 401
 
 	auth_token = auth.split(' ')[1]
 
-	# Si aucun token n'est envoyé, c'est qu'il y a une erreur 
-	if auth_token is None:
-		return 'Unauthorized', 401
-	
 	# Si on a reçu un token, on le décode pour vérifier qu'il s'agit du bon
 	decode = decode_token(auth_token)
 	if decode != 'quiz-app-admin':
