@@ -23,7 +23,26 @@ class Database:
         self.cur.execute(query, (question_id, answer.text, answer.isCorrect))
         self.con.commit()
 
-    def getQuestion(self, id):
+    def question_to_json(self, question, answers):
+        return {
+            "id": question[0],
+            "position": question[1],
+            "title": question[2],
+            "text": question[3],
+            "image": question[4],
+            "possibleAnswers": [self.answer_to_json(answer) for answer in answers]
+        }
+
+
+    def answer_to_json(self, answer):
+        return {
+            "id": answer[0],
+            "question_id": answer[1],
+            "text": answer[2],
+            "isCorrect": True if answer[3] == 1 else False
+        }
+    
+    def getQuestionById(self, id):
         query = "SELECT * FROM questions WHERE id = ?"
         self.cur.execute(query, (id,))
         question_sql = self.cur.fetchone()
@@ -33,18 +52,22 @@ class Database:
         answers_sql = self.cur.fetchall()
 
         question = Question()
-        question.id = question_sql[0]
-        question.position = question_sql[1]
-        question.title = question_sql[2]
-        question.text = question_sql[3]
-        question.image = question_sql[4]
+        
+        question.to_python(self.question_to_json(question_sql, answers_sql))
 
-        for answer_sql in answers_sql:
-            answer = Answer()
-            answer.id = answer_sql[0]
-            answer.text = answer_sql[2]
-            answer.isCorrect = True if answer_sql[3] == 1 else False
+        return question
 
-            question.answers.append(answer)
+    def getQuestionByPosition(self, position):
+        query = "SELECT * FROM questions WHERE position = ?"
+        self.cur.execute(query, (position,))
+        question_sql = self.cur.fetchone()
+
+        query = "SELECT * FROM answers WHERE question_id = ?"
+        self.cur.execute(query, (question_sql[0],))
+        answers_sql = self.cur.fetchall()
+
+        question = Question()
+        
+        question.to_python(self.question_to_json(question_sql, answers_sql))
 
         return question

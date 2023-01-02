@@ -63,13 +63,28 @@ def ProcessQuestions():
 
 		return str(id), 200
 
+	elif request.method == 'GET':
+		position = request.args.get('position')
+		if position is None:
+			return 'Unauthorized', 401
+		
+		question = bdd.getQuestionByPosition(position)
+		return question.to_json(), 200
+
+
+
 	else:
 		return 'Unauthorized', 401
 
 
 @app.route('/questions/<id>', methods=['GET'])
 def GetQuestion(id):
-	question = bdd.getQuestion(id)
+
+	# If id is not an integer
+	if not id.isdigit():
+		return 'Unauthorized', 401
+
+	question = bdd.getQuestionById(id)
 	return question.to_json(), 200
 
 
