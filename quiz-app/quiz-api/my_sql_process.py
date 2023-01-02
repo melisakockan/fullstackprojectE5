@@ -47,6 +47,9 @@ class Database:
         self.cur.execute(query, (id,))
         question_sql = self.cur.fetchone()
 
+        if question_sql is None:
+            return None
+
         query = "SELECT * FROM answers WHERE question_id = ?"
         self.cur.execute(query, (id,))
         answers_sql = self.cur.fetchall()
@@ -62,6 +65,9 @@ class Database:
         self.cur.execute(query, (position,))
         question_sql = self.cur.fetchone()
 
+        if question_sql is None:
+            return None
+
         query = "SELECT * FROM answers WHERE question_id = ?"
         self.cur.execute(query, (question_sql[0],))
         answers_sql = self.cur.fetchall()
@@ -71,3 +77,14 @@ class Database:
         question.to_python(self.question_to_json(question_sql, answers_sql))
 
         return question
+
+
+    def deleteAnswers(self, question_id):
+        query = "DELETE FROM answers WHERE question_id = ?"
+        self.cur.execute(query, (question_id,))
+        self.con.commit()
+
+    def updateQuestion(self, question, id):
+        query = "UPDATE questions SET position = ?, title = ?, text = ?, image = ? WHERE id = ?"
+        self.cur.execute(query, (question.position, question.title, question.text, question.image, id))
+        self.con.commit()
