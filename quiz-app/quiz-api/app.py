@@ -7,6 +7,7 @@ CORS(app)
 from my_sql_process import *
 from Question import *
 
+
 bdd = Database('database.db')
 
 @app.route('/')
@@ -52,6 +53,9 @@ def ProcessQuestions():
 		my_question.to_python(request.get_json())
 
 		id = bdd.addQuestion(my_question)
+
+		for answer in my_question.answers:
+			bdd.addAnswer(answer, id)
 
 	return str(id), 200
 
