@@ -60,23 +60,23 @@ class Database:
 
         return question
 
-    def getQuestionByPosition(self, position):
-        query = "SELECT * FROM questions WHERE position = ?"
+    def getIdByPosition(self, position):
+        query = "SELECT id FROM questions WHERE position = ?"
         self.cur.execute(query, (position,))
-        question_sql = self.cur.fetchone()
+        id = self.cur.fetchone()
 
-        if question_sql is None:
+        if id is None:
             return None
 
-        query = "SELECT * FROM answers WHERE question_id = ?"
-        self.cur.execute(query, (question_sql[0],))
-        answers_sql = self.cur.fetchall()
+        return id[0]
 
-        question = Question()
-        
-        question.to_python(self.question_to_json(question_sql, answers_sql))
+    def getQuestionByPosition(self, position):
+        id = self.getIdByPosition(position)
 
-        return question
+        if id is None:
+            return None
+
+        return self.getQuestionById(id)
 
 
     def deleteAnswers(self, question_id):
@@ -105,4 +105,17 @@ class Database:
         self.con.commit()
         self.deleteAllAnswers()
 
+    def offsetPosition(self, position):
+        query = "UPDATE questions SET position = position + 1 WHERE position >= ?"
+        self.cur.execute(query, (position,))
+        self.con.commit()
+
+    def offsetExistingPosition(self, old_position, new_position):
+        if old_position < new_position:
+            query = "UPDATE questions SET position = position - 1 WHERE position > ? AND position <= ?"
+            self.cur.execute(query, (old_position, new_position))
+        else:
+            query = "UPDATE questions SET position = position + 1 WHERE position >= ? AND position < ?"
+            self.cur.execute(query, (new_position, old_position))
+        self.con.commit()
   

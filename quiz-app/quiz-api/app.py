@@ -62,6 +62,11 @@ def ProcessQuestions():
 			my_question = Question()
 			my_question.to_python(request.get_json())
 
+			
+			if bdd.getIdByPosition(my_question.position) is not None:
+				bdd.offsetPosition(my_question.position)
+				
+
 			id = bdd.addQuestion(my_question)
 
 			for answer in my_question.answers:
@@ -89,9 +94,21 @@ def ProcessQuestions():
 
 @app.route('/questions/<id>', methods=['GET', 'PUT', 'DELETE'])
 def Process(id):
-    	
+    
+	if id == "all" and request.method == 'DELETE':
+		# On Récupère le token envoyé en paramètre
+		auth = request.headers.get('Authorization')
+
+		if not check_auth(auth):
+			return 'Unauthorized', 401
+
+		else:
+			bdd.deleteAllQuestions()
+			return 'All questions deleted', 204
+
+
 	# If id is not an integer
-	if not id.isdigit():
+	elif not id.isdigit():
 			return 'Incorrect ID', 401
 
 	question = bdd.getQuestionById(id)
@@ -101,9 +118,6 @@ def Process(id):
 
     	
 	if request.method == 'GET':
-
-		
-
 		return question.to_json(), 200
 
 	elif request.method == 'PUT':
@@ -118,11 +132,8 @@ def Process(id):
 			new_question = Question()
 			new_question.to_python(request.get_json())
 
-			# On modifie la question
-			question.title = new_question.title
-			question.text = new_question.text
-			question.image = new_question.image
-			question.position = new_question.position
+			if new_question.position != question.position:
+				bdd.offsetExistingPosition(question.position, new_question.position)
 
 			# On supprime les anciennes réponses
 			bdd.deleteAnswers(id)
@@ -132,12 +143,12 @@ def Process(id):
 				bdd.addAnswer(answer, id)
 
 			# On met à jour la question
-			bdd.updateQuestion(question, id)
+			bdd.updateQuestion(new_question, id)
 
 			return 'OK', 204
 
 	elif request.method == 'DELETE':
-		# On Récupère le token envoyé en paramètre
+    		# On Récupère le token envoyé en paramètre
 		auth = request.headers.get('Authorization')
 
 		if not check_auth(auth):
