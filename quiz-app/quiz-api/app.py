@@ -65,20 +65,41 @@ def process_questions_1():
 
 		# Si c'est vraiment le bon token, on peut ajouter la question à notre BDD et retourner l'id de la question
 		else:
-			my_question = Question()
-			my_question.to_python(request.get_json())
+    			
+			questions = request.get_json()
 
-			
-			if bdd.getIdByPosition(my_question.position) is not None:
-				bdd.offsetPosition(my_question.position)
-				
+			# If questions is a list
+			if isinstance(questions, list):
+				for question in questions:
 
-			id = bdd.addQuestion(my_question)
+					my_question = Question()
+					my_question.to_python(question)
 
-			for answer in my_question.answers:
-				bdd.addAnswer(answer, id)
+					if bdd.getIdByPosition(my_question.position) is not None:
+						bdd.offsetPosition(my_question.position)
+						
+					id = bdd.addQuestion(my_question)
 
-		return str(id), 200
+					for answer in my_question.answers:
+						bdd.addAnswer(answer, id)
+
+				return str(id), 200
+
+			# If questions is a dict
+			else:
+				my_question = Question()
+				my_question.to_python(questions)
+
+				if bdd.getIdByPosition(my_question.position) is not None:
+					bdd.offsetPosition(my_question.position)
+					
+				id = bdd.addQuestion(my_question)
+
+				for answer in my_question.answers:
+					bdd.addAnswer(answer, id)
+
+			return str(id), 200
+    			
 
 	elif request.method == 'GET':
 		position = request.args.get('position')
