@@ -19,6 +19,7 @@
 
 <script>
 import quizApiService from "@/services/QuizApiService";
+import participationStorageService from "@/services/ParticipationStorageService";
 export default {
   data() {
     return {
@@ -27,9 +28,9 @@ export default {
   },
   methods: {
     launchNewQuiz() {
+      const playerName = participationStorageService.getPlayerName();
       console.log("Launch new quiz with", this.username);
-    },
-
+    }
   }
 }
 </script>
