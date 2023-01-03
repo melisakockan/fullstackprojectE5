@@ -13,7 +13,8 @@ class Question:
             "title": self.title,
             "text": self.text,
             "image": self.image,
-            "position": self.position
+            "position": self.position,
+            "possibleAnswers": [answer.to_json() for answer in self.answers]
         }
 
     def to_python(self, json):

@@ -12,4 +12,6 @@ class Answer:
     def to_python(self, json):
         self.text = json["text"]
         self.isCorrect = json["isCorrect"]
+
+    
   
