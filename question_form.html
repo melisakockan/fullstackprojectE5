@@ -1,0 +1,179 @@
+<!-- Create a HTML JS Form that fill the following JSON and save it to a folder : {
+    "text": "",
+    "title": "",
+    "image": "",
+    "position": 2,
+    "possibleAnswers": [
+        {
+            "text": "",
+            "isCorrect": false 
+        },
+        {
+            "text": "",
+            "isCorrect": true
+        },
+        {
+            "text": "",
+            "isCorrect": false
+        },
+        {
+            "text": "",
+            "isCorrect": false
+        }
+    ]
+} -->
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question generator</title>
+</head>
+<body>
+
+    <div id="myapp">
+
+        <div v-if="visible">
+           {{ json_output }}
+        </div>
+
+        <div v-else>
+            <form id="my_form" @submit.prevent>
+                <label for="title">Title</label>
+                <input type="text" name="title" placeholder="Title" v-model="title">
+                <label for="text">Text</label>
+                <input type="text" name="text" placeholder="Text" v-model="text">
+                <label for="image">Image</label>
+                <input type="file" @change="encodeImageFileAsURL()">
+                <label for="position">Position</label>
+                <input type="number" name="position" placeholder="Position"  v-model="position">
+                <label for="possibleAnswers">Answers</label>
+                <!-- Answer 1 -->
+                <div>
+                    <input type="text" name="answer1" placeholder="Answer 1" v-model="possibleAnswers[0].text">
+                    <input type="checkbox" name="isCorrect1" value="isCorrect" v-model="possibleAnswers[0].isCorrect">
+                    <label for="isCorrect1">Is correct</label>
+                </div>
+        
+                <div>
+                    <input type="text" name="answer2" placeholder="Answer 2" v-model="possibleAnswers[1].text">
+                    <input type="checkbox" name="isCorrect2" value="isCorrect" v-model="possibleAnswers[1].isCorrect">
+                    <label for="isCorrect2">Is correct</label>
+                </div>
+        
+                <div>
+                    <input type="text" name="answer3" placeholder="Answer 3" v-model="possibleAnswers[2].text">
+                    <input type="checkbox" name="isCorrect3" value="isCorrect" v-model="possibleAnswers[2].isCorrect">
+                    <label for="isCorrect3">Is correct</label>
+                </div>
+        
+                <div>
+                    <input type="text" name="answer4" placeholder="Answer 4" v-model="possibleAnswers[3].text">
+                    <input type="checkbox" name="isCorrect4" value="isCorrect"  v-model="possibleAnswers[3].isCorrect">
+                    <label for="isCorrect4">Is correct</label>
+                </div>
+        
+                <input type="submit" value="Submit" @click="getJSON()">
+            </form>
+        </div>
+
+     
+    </div>
+
+    
+    
+</body>
+</html>
+
+
+<style>
+
+
+#my_form{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    align-items: center;
+}
+
+#my_form input{
+    margin: 10px;
+}
+
+</style>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.7.14/dist/vue.js"></script>
+
+<script>
+    // New vue instance
+    var app = new Vue({
+        el: '#myapp',
+        data: {
+            visible: false,
+            title: '',
+            text: '',
+            image: '',
+            imageb64: '',
+            position: '',
+            possibleAnswers: [
+                {
+                    text: '',
+                    isCorrect: false
+                },
+                {
+                    text: '',
+                    isCorrect: false
+                },
+                {
+                    text: '',
+                    isCorrect: false
+                },
+                {
+                    text: '',
+                    isCorrect: false
+                }
+            ]
+        },
+        methods: {
+            // From https://stackoverflow.com/questions/65313129/vue-convert-image-into-base64
+            encodeImageFileAsURL : function() {
+                    const file = document.querySelector('input[type=file]').files[0]
+                    const reader = new FileReader()
+
+                    let rawImg;
+                    reader.onloadend = () => {
+                    rawImg = reader.result;
+                    this.imageb64 = rawImg;
+                    }
+
+                    reader.readAsDataURL(file);
+            },
+
+            getJSON: async function(){
+                this.visible = true;
+                await navigator.clipboard.writeText(JSON.stringify(this.json_output));
+
+            }
+        },
+
+        // Computed
+        computed: {
+            // From https://stackoverflow.com/questions/65313129/vue-convert-image-into-base64
+            json_output: function(){
+                return {
+                    "text": this.text,
+                    "title": this.title,
+                    "position": this.position,
+                    "image": this.imageb64,
+                    "possibleAnswers": this.possibleAnswers
+                }
+            }
+        }
+    })
+
+
+
+</script>

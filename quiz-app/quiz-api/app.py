@@ -213,5 +213,25 @@ def process_participations_2():
 		return result, 200
 
 
+
+@app.route('/rebuild-db', methods=['POST'])
+def rebuild_db():
+    	# On Récupère le token envoyé en paramètre
+		auth = request.headers.get('Authorization')
+
+		if not check_auth(auth):
+			return 'Unauthorized', 401
+
+		# Authentifié
+		else:
+			try:
+				bdd.rebuildDB()
+				return 'Ok', 200
+
+			except Exception as e:
+				print(e)
+				return 'Error when rebuilding DB', 400
+
+
 if __name__ == "__main__":
     app.run(debug=True)

@@ -1,10 +1,13 @@
 import sqlite3
 from Question import *
 from Answer import *
+from Participation import *
+import os
 
 class Database:
     def __init__(self, db):
-        self.con = sqlite3.connect(db, check_same_thread=False)
+        self.db_name = db
+        self.con = sqlite3.connect(self.db_name, check_same_thread=False)
         self.con.isolation_level = None
         self.cur = self.con.cursor()
 
@@ -194,3 +197,29 @@ class Database:
             "text": question[3],
             "image": question[4]
         } for question in questions]
+
+
+    def rebuildDB(self):
+        self.deleteDB()
+        self.createDB()
+
+
+    def deleteDB(self):
+        # DROP DATABASE
+        query = "DROP TABLE IF EXISTS questions"
+        self.cur.execute(query)
+        query = "DROP TABLE IF EXISTS answers"
+        self.cur.execute(query)
+        query = "DROP TABLE IF EXISTS participations"
+        self.cur.execute(query)
+        self.con.commit()
+
+    def createDB(self):
+        # CREATE DATABASE
+        query = "CREATE TABLE IF NOT EXISTS questions (id INTEGER PRIMARY KEY AUTOINCREMENT, position INTEGER, title TEXT, text TEXT, image TEXT)"
+        self.cur.execute(query)
+        query = "CREATE TABLE IF NOT EXISTS answers (id INTEGER PRIMARY KEY AUTOINCREMENT, question_id INTEGER, text TEXT, is_correct INTEGER)"
+        self.cur.execute(query)
+        query = "CREATE TABLE IF NOT EXISTS participations (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT, player_name TEXT, score INTEGER)"
+        self.cur.execute(query)
+        self.con.commit()
