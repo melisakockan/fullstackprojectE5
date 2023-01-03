@@ -142,7 +142,7 @@ class Database:
         self.con.commit()
 
     def getAllParticipations(self):
-        query = "SELECT * FROM participations"
+        query = "SELECT * FROM participations ORDER BY score DESC"
         self.cur.execute(query)
         participations = self.cur.fetchall()
 

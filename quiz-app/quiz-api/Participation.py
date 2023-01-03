@@ -21,7 +21,7 @@ class Participation:
             return
 
         for i in range(len(self.answers)):
-            selected_answer = self.answers[i]
+            selected_answer = self.answers[i] - 1
 
             if questions[i].answers[selected_answer].isCorrect:
                 self.score += 1

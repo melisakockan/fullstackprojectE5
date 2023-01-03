@@ -35,7 +35,8 @@ def GetQuizInfo():
 	number_of_questions = bdd.getNumberOfQuestions()
 
 	all_participations = bdd.getAllParticipations()
-	
+
+
 	return {"size": number_of_questions, "scores": all_participations}, 200
 
 @app.route('/login', methods=['POST']) #ceci est un nouveau endpoint
@@ -198,8 +199,6 @@ def process_participations_2():
 			q = Question()
 			q.to_python(question)
 			all_q.append(q)
-
-
 		
 
 		participation.compute_score(all_q)
@@ -211,7 +210,6 @@ def process_participations_2():
 
 		result = participation.to_json()
 	
-
 		return result, 200
 
 
