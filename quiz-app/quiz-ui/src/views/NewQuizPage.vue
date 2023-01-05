@@ -1,15 +1,11 @@
 <template>
   <h1>Démarrez le quiz</h1>
-  <div class="NewQuizPage">
-  </div>
 
-  <form>
-    <div class="mb-3">
-      <label for="insertusername" class="form-label">Saisissez votre nom :</label>
-      <input type="text" v-model="username" class="form-control" id="myusername">
-      <!--<p>{{ username }}</p>-->
+  <form id="start_form">
+    <div>
+      <input type="text" v-model="username" id="myusername" placeholder="Entrez votre nom">
     </div>
-    <button class="btn btn-primary" @click="launchNewQuiz">Go !</button>
+    <button @click="launchNewQuiz">Go !</button>
   </form>
 
   <!-- Le code de ce form a été inspiré de la doc bootstrap 
@@ -38,11 +34,26 @@ export default {
 </script>
 
 <style>
-@media (min-width: 1024px) {
-  .NewQuizPage {
-    min-height: 50%;
-    display: flex;
-    align-items: center;
-  }
+
+#start_form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin: 80px 0px;
 }
+
+#start_form label {
+  margin: 10px;
+}
+
+#start_form input {
+  margin: 10px;
+  color: rgb(75, 75, 75);
+
+  padding: 10px 30px;
+  text-align: center;
+  border-radius: 5px;
+}
+
 </style>
