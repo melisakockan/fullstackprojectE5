@@ -1,7 +1,7 @@
 <template>
 
-    <div v-if="isOver">
-        <h1>Quiz Ended</h1>
+    <div v-if="isOver" id="ended">
+        <h1>Bravo {{ playerName }}</h1>
         <h2>Your Score is : {{score}} / {{totalNumberOfQuestion}}</h2>
         <iframe src="https://giphy.com/embed/BPJmthQ3YRwD6QqcVD" id="gif" ></iframe>
     </div>
@@ -17,6 +17,8 @@
 <script>
 import QuestionDisplay from '@/components/QuestionDisplay.vue';
 import quizApiService from "@/services/QuizApiService";
+import participationStorageService from "@/services/ParticipationStorageService";
+
 
 export default {
 
@@ -26,12 +28,16 @@ export default {
             totalNumberOfQuestion: null,
             currentQuestion: null,
             isOver: false,
-            score: null
+            score: null,
+            choices: [],
+            playerName: null
         }
     },
 
     methods: {
         async answerClickedHandler(answerIndex) {
+
+            this.choices.push(answerIndex);
             
 
             if (this.currentQuestionPosition >= this.totalNumberOfQuestion) {
@@ -52,7 +58,10 @@ export default {
         },
 
         async endQuiz() {
-            alert("Quiz Ended");
+            this.playerName = participationStorageService.getPlayerName();
+            const result = await quizApiService.addParticipation(this.playerName, this.choices);
+            this.score = result["data"]["score"];
+            participationStorageService.saveParticipationScore(this.score);
             this.isOver = true;
         }
     },
@@ -79,10 +88,20 @@ export default {
 
 <style>
 #gif{
-    width: 100%;
     height: 100%;
+    aspect-ratio: 16/9;
     border: none;
     overflow: hidden;
     background: transparent;
+
+}
+
+#ended{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
 }
 </style>

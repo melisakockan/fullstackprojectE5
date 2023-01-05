@@ -33,5 +33,10 @@ export default {
   },
   getQuestion(position) {
     return this.call("get", `questions/${position}`);
+  },
+
+  addParticipation(name, choices){
+    return this.call("post", "participations", {"playerName" : name, "answers" : choices});
   }
+
 };

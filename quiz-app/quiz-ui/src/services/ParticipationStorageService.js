@@ -6,16 +6,13 @@ export default {
     window.localStorage.setItem("username", playerName);
   },
   getPlayerName() {
-    window.localStorage.getItem("username");// todo : implement
+    return window.localStorage.getItem("username");// todo : implement
   },
   saveParticipationScore(participationScore) {
-    let name = getPlayerName();
-    window.localStorage.setItem("registeredScores[" + name + "]", participationScore);
-
-    // window.localStorage.setItem("registeredScores[getPlayerName()]", participationScore);// todo : implement
+    window.localStorage.setItem("score", participationScore);
   },
   getParticipationScore() {
     let name = getPlayerName();
-    window.localStorage.getItem("registeredScores[" + name + "]");
+    return window.localStorage.getItem("score");
   }
 };

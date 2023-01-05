@@ -61,18 +61,26 @@ export default {
 
 }
 
+#container > div:last-of-type{
+  width: 60%;
+}
 
 .answers {
-  margin : auto;
-  width: 60%;
+  width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
+  grid-gap: 20px;
+
+  justify-items: center;
+  align-items: center;
+  
 
   
 }
 
 .answers button{
   min-height: 60px;
+  width: 100%;
   text-transform: none;
   border-radius: 10px;
 }
@@ -116,14 +124,21 @@ export default {
     min-width: 0px;
   }
 
+  #container > div:last-of-type{
+  width: 90%;
+}
+
 
   .answers {
     width: 100%;
     grid-template-columns: 1fr;
+    grid-gap: 0px;
   }
 
   .answers button{
-    min-height: 40px;
+    height: 70px;
+    width: 90%;
+
   }
 }
   
