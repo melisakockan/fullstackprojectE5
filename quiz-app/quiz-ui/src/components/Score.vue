@@ -2,7 +2,7 @@
 
     <div id="ended">
         <h1>Bravo {{ playerName }}</h1>
-        <h2>Your Score is : {{score}} / {{totalNumberOfQuestion}}</h2>
+        <h2>Votre score est : {{score}} / {{totalNumberOfQuestion}}</h2>
         <iframe src="https://giphy.com/embed/BPJmthQ3YRwD6QqcVD" id="gif" ></iframe>
     </div>
     
