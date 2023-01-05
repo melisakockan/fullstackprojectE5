@@ -9,9 +9,13 @@ export default {
     window.localStorage.getItem("username");// todo : implement
   },
   saveParticipationScore(participationScore) {
-    window.localStorage.setItem("registeredScores[getPlayerName()]", participationScore);// todo : implement
+    let name = getPlayerName();
+    window.localStorage.setItem("registeredScores[" + name + "]", participationScore);
+
+    // window.localStorage.setItem("registeredScores[getPlayerName()]", participationScore);// todo : implement
   },
   getParticipationScore() {
-    window.localStorage.getItem(registeredScores[getPlayerName()]);// todo : implement
+    let name = getPlayerName();
+    window.localStorage.getItem("registeredScores[" + name + "]");
   }
 };
