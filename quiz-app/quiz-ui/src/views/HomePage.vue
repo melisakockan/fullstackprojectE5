@@ -9,8 +9,8 @@
 
 
   <h1>Leaderboard</h1>
-  <div v-for="scoreEntry in registeredScores" v-bind:key="scoreEntry.date" id="scores">
-      <p>{{ scoreEntry.date }}</p>
+  <div v-for="(scoreEntry, index) in registeredScores.slice(0, 10)" v-bind:key="scoreEntry.date" id="scores">
+      <p>#{{ index+1 }}</p>
       <p>{{ scoreEntry.playerName }}</p>
       <p>{{ scoreEntry.score }}</p>
   </div>
@@ -40,7 +40,7 @@ export default {
 
 
 #scores{
-  margin-top: 50px;
+  margin: 50px 0px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
 }
