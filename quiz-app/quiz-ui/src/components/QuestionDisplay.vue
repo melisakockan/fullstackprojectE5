@@ -2,10 +2,10 @@
 
   <div id="container">
 
-    <div v-if="question.image" id="question_cover" :style="{ 'background-image': 'url(' + question.image + ')' }">
+    <div v-if="question != null" id="question_cover" :style="{ 'background-image': 'url(' + question.image + ')' }">
     </div>
 
-    <div>
+    <div v-if="question != null">
       <h1>{{ pos }}/{{ tot }} : {{question.title}}</h1>
 
       <h2> {{question.text}}</h2>

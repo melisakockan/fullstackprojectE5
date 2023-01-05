@@ -2,6 +2,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import HomePage from '../views/HomePage.vue'
 import NewQuizPage from '../views/NewQuizPage.vue'
 import Questions from '../views/Questions.vue'
+import Score from '../views/ScorePage.vue'
+import Joueur from '../views/Joueur.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -28,6 +30,16 @@ const router = createRouter({
       path: '/questions',
       name: 'questions',
       component: Questions
+    },
+    {
+      path: '/score',
+      name: 'score',
+      component: Score
+    },
+    {
+      path: '/joueur',
+      name: 'joueur',
+      component: Joueur
     }
   ]
 })

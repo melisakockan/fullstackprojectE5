@@ -1,16 +1,6 @@
 <template>
 
-    <div v-if="isOver" id="ended">
-        <h1>Bravo {{ playerName }}</h1>
-        <h2>Your Score is : {{score}} / {{totalNumberOfQuestion}}</h2>
-        <iframe src="https://giphy.com/embed/BPJmthQ3YRwD6QqcVD" id="gif" ></iframe>
-    </div>
-
-    <div v-else>
         <QuestionDisplay :question="currentQuestion" :pos="currentQuestionPosition" :tot="totalNumberOfQuestion" @answer-selected="answerClickedHandler" /> 
-    </div>
-        
-    
 
 </template>
 
@@ -27,10 +17,7 @@ export default {
             currentQuestionPosition: 1,
             totalNumberOfQuestion: null,
             currentQuestion: null,
-            isOver: false,
-            score: null,
-            choices: [],
-            playerName: null
+            choices: []
         }
     },
 
@@ -58,11 +45,11 @@ export default {
         },
 
         async endQuiz() {
-            this.playerName = participationStorageService.getPlayerName();
-            const result = await quizApiService.addParticipation(this.playerName, this.choices);
-            this.score = result["data"]["score"];
-            participationStorageService.saveParticipationScore(this.score);
-            this.isOver = true;
+            let playerName = participationStorageService.getPlayerName();
+            let result = await quizApiService.addParticipation(playerName, this.choices);
+            let score = result["data"]["score"];
+            participationStorageService.saveParticipationScore(score);
+            this.$router.push("/score");
         }
     },
 
@@ -84,24 +71,3 @@ export default {
 
 }
 </script>
-
-
-<style>
-#gif{
-    height: 100%;
-    aspect-ratio: 16/9;
-    border: none;
-    overflow: hidden;
-    background: transparent;
-
-}
-
-#ended{
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    width: 100%;
-}
-</style>
