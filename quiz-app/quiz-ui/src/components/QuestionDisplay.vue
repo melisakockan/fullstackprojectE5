@@ -2,11 +2,11 @@
 
   <div id="container">
 
-    <div id="question_cover" :style="{ 'background-image': 'url(' + question.image + ')' }">
+    <div v-if="question.image" id="question_cover" :style="{ 'background-image': 'url(' + question.image + ')' }">
     </div>
 
     <div>
-      <h1>{{question.title}}</h1>
+      <h1>{{ pos }}/{{ tot }} : {{question.title}}</h1>
 
       <h2> {{question.text}}</h2>
       
@@ -31,7 +31,9 @@ export default {
   props: {
     question: {
       type: Object
-    }
+    },
+    pos: {type: Number},
+    tot: {type: Number}
   },
 
   emits: ['answer-selected']
@@ -72,8 +74,8 @@ export default {
 .answers button{
   min-height: 60px;
   text-transform: none;
+  border-radius: 10px;
 }
-
 
 
 #question_cover{
@@ -86,6 +88,27 @@ export default {
 
   border-radius: 30px;
 }
+
+.answers button:nth-of-type(1){
+  background-color: #b31a85;
+  color: white;
+}
+
+.answers button:nth-of-type(2){
+  background-color: #ee4266;
+  color: white;
+}
+
+.answers button:nth-of-type(3){
+  background-color: #e8bb27;
+  color: white;
+}
+
+.answers button:nth-of-type(4){
+  background-color: #3bce87;
+  color: white;
+}
+
 
 @media screen and (max-width: 600px) {
   #question_cover{

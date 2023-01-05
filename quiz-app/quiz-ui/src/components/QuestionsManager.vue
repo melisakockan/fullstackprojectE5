@@ -1,9 +1,17 @@
 <template>
-  
-  <!-- <h1>Question {{ currentQuestionPosition }} / {{ totalNumberOfQuestion }}</h1> -->
+
+    <div v-if="isOver">
+        <h1>Quiz Ended</h1>
+        <h2>Your Score is : {{score}} / {{totalNumberOfQuestion}}</h2>
+        <iframe src="https://giphy.com/embed/BPJmthQ3YRwD6QqcVD" id="gif" ></iframe>
+    </div>
+
+    <div v-else>
+        <QuestionDisplay :question="currentQuestion" :pos="currentQuestionPosition" :tot="totalNumberOfQuestion" @answer-selected="answerClickedHandler" /> 
+    </div>
+        
     
-  <QuestionDisplay :question="currentQuestion" @answer-selected="answerClickedHandler" /> 
-  
+
 </template>
 
 <script>
@@ -15,21 +23,46 @@ export default {
     data() {
         return {
             currentQuestionPosition: 1,
-            totalNumberOfQuestion: 3,
-            currentQuestion: null
+            totalNumberOfQuestion: null,
+            currentQuestion: null,
+            isOver: false,
+            score: null
         }
     },
 
     methods: {
-        answerClickedHandler(answerIndex) {
-            console.log('answer clicked', answerIndex);
+        async answerClickedHandler(answerIndex) {
+            
+
+            if (this.currentQuestionPosition >= this.totalNumberOfQuestion) {
+                this.endQuiz();
+                return;
+            }
+            else{
+                this.currentQuestionPosition++;
+                await this.loadQuestionByPosition(this.currentQuestionPosition);
+            }
+            
+
+        },
+
+        async loadQuestionByPosition(position) {
+            const question = await quizApiService.getQuestion(position);
+            this.currentQuestion = question["data"];
+        },
+
+        async endQuiz() {
+            alert("Quiz Ended");
+            this.isOver = true;
         }
     },
 
     async created() {
 
-        const question = await quizApiService.getQuestion(1);
-        this.currentQuestion = question["data"];
+        await this.loadQuestionByPosition(1);
+        const quizInfo = await quizApiService.getQuizInfo();
+
+        this.totalNumberOfQuestion = (quizInfo["data"]["size"]);
         
 
     },
@@ -42,3 +75,14 @@ export default {
 
 }
 </script>
+
+
+<style>
+#gif{
+    width: 100%;
+    height: 100%;
+    border: none;
+    overflow: hidden;
+    background: transparent;
+}
+</style>
