@@ -1,7 +1,9 @@
 <template>
-  <h1>Home page</h1>
-  <div v-for="scoreEntry in registeredScores" v-bind:key="scoreEntry.date">
-    <p>{{ scoreEntry.date }} - {{ scoreEntry.playerName }} - {{ scoreEntry.score }}</p>
+  <h1>Leaderboard</h1>
+  <div v-for="scoreEntry in registeredScores" v-bind:key="scoreEntry.date" id="scores">
+      <p>{{ scoreEntry.date }}</p>
+      <p>{{ scoreEntry.playerName }}</p>
+      <p>{{ scoreEntry.score }}</p>
   </div>
 </template>
 
@@ -22,3 +24,30 @@ export default {
   }
 };
 </script>
+
+
+
+<style>
+
+
+#scores{
+  margin-top: 50px;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+#scores p{
+  margin: 0;
+  text-align: center;
+  width: 100%;
+}
+
+
+#scores p:nth-child(3n){
+  font-weight: bold;
+  color: white;
+  font-size: 1.5em;
+}
+
+
+</style>
