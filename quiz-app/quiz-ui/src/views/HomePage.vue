@@ -1,4 +1,13 @@
 <template>
+  <!-- Router button to start quiz -->
+  <div id="new_quiz_container">
+    <router-link to="/start-new-quiz-page" id="start_new_quiz">
+      Démarrer un nouveau quiz
+    </router-link>
+  </div>
+  
+
+
   <h1>Leaderboard</h1>
   <div v-for="scoreEntry in registeredScores" v-bind:key="scoreEntry.date" id="scores">
       <p>{{ scoreEntry.date }}</p>
@@ -47,6 +56,11 @@ export default {
   font-weight: bold;
   color: white;
   font-size: 1.5em;
+}
+
+#new_quiz_container{
+  margin: 50px 0px;
+  text-align: center;
 }
 
 

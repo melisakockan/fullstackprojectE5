@@ -127,7 +127,9 @@ h1{
     margin-top: 30px;
   }
 
-  button{
+  button, #start_new_quiz{
+    cursor: pointer;
+    text-decoration: none;
     margin: 10px;
     color: white;
     font-weight: bold;
@@ -142,7 +144,7 @@ h1{
   
   }
   
-  button:hover{
+  button:hover, #start_new_quiz:hover{
     opacity: 0.8;
   }
 
