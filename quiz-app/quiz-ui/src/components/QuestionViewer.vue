@@ -12,8 +12,13 @@
         </div>
         <div id="questionview" v-if="question != null">
             <p>{{question.position}}</p>
+            
             <h2>{{question.title}}</h2>
+            <!-- Image -->
+            <img v-if="question.image != null" :src="question.image" alt="" class="imageview">
             <h3>{{question.text}}</h3>
+
+            
             
             <div class="answersview">
                 <button v-for="(answer, index) in question.possibleAnswers" :class="{ correct : answer.isCorrect }">{{ answer.text }}</button>
@@ -124,6 +129,12 @@ export default {
     border-radius: 10px;
     border: none;
 
+}
+
+.imageview{
+    height: 200px;
+    aspect-ratio: 16/9;
+    object-fit: cover;
 }
 
 @media screen and (max-width: 800px) {
