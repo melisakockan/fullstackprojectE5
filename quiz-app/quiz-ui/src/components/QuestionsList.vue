@@ -4,7 +4,7 @@
         <p>{{question.position}}</p>
         <p>{{question.title}}</p>
         <p>{{question.text}}</p>
-        <button @click="emitQuestionNumber(question.id)">Edit</button>
+        <button @click="emitQuestionNumber(question.id)">Voir</button>
     </div>
     
   

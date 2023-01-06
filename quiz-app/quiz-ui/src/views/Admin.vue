@@ -7,7 +7,7 @@
     <!-- Admin -->
 
     <div v-if="logged">
-        <QuestionsList @question_number="EditHandler"/>
+        <QuestionsList @question_number="QuestionsListHandler"/>
     </div>
 
   
@@ -41,7 +41,7 @@ export default {
             this.logged = logged;
         },
 
-        EditHandler(index) {
+        QuestionsListHandler(index) {
             alert(index);
         }
 
