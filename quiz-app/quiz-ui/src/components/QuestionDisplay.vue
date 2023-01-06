@@ -108,14 +108,10 @@ export default {
       let q4 = document.getElementById(3);
       let all = [q1, q2, q3, q4];
 
-      q1.style.backgroundColor = "#b31a85";
-      q2.style.backgroundColor = "#ee4266";
-      q3.style.backgroundColor = "#e8bb27";
-      q4.style.backgroundColor = "#3bce87";
-
       let max_height = 0;
       
       for (let i = 0; i < all.length; i++) {
+        all[i].style.backgroundColor = "#0077b6";
         all[i].style.color = "white";
 
         if (all[i].offsetHeight > max_height) {
