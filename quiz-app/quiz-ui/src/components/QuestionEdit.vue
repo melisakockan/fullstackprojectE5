@@ -6,21 +6,23 @@
     <div id="containeredit" v-if="question != null">
            <!-- Back to Questions List -->
         <div id="actionsview">
-            <button @click="$emit('question_number', null)">Retour</button>
-            <button @click="$emit('edit', question_number)">Éditer</button>
-            <button @click="deleteQuestion">Supprimer</button>
+            <button @click="$emit('edit', null)">Retour</button>
         </div>
         
         <form id="my_form" @submit.prevent>
-            <label for="title">Title</label>
+            <label for="title">Titre</label>
             <input type="text" name="title" placeholder="Title" v-model="question.title">
-            <label for="text">Text</label>
+            <label for="text">Texte</label>
             <input type="text" name="text" placeholder="Text" v-model="question.text">
             <label for="image">Image</label>
-            <input type="file" @change="encodeImageFileAsURL()">
+            
+            <ImageUpload @file-change="FileHandler"/>
+
+            <img v-if="question.image != null" :src="question.image" alt="" class="imageedit">
+
             <label for="position">Position</label>
             <input type="number" name="position" placeholder="Position"  v-model="question.position">
-            <label for="possibleAnswers">Answers</label>
+            <label for="possibleAnswers">Réponses</label>
             <!-- Answer 1 -->
             <div v-for="(answer, index) in question.possibleAnswers" :key="index">
                 <input type="checkbox" name="isCorrect" v-model="answer.isCorrect" @change="uniqueCheck(index)">
@@ -38,6 +40,7 @@
 
 <script>
 import QuizApiService from "@/services/QuizApiService";
+import ImageUpload from "@/components/ImageUpload.vue";
 
 
 export default {
@@ -52,7 +55,12 @@ export default {
     data() {
         return {
             question: null,
+            originalImage: null
         }
+    },
+
+    components: {
+        ImageUpload
     },
 
     methods: {
@@ -73,16 +81,27 @@ export default {
             this.question.possibleAnswers[index].isCorrect = true;
             
 
+        },
+
+        FileHandler(file){
+            
+            if (file == "") {
+                this.question.image = this.originalImage;
+            }
+            else{
+                this.question.image = file;
+            }
         }
      
     },
 
-    emits: ['question_number', 'edit'],
+    emits: ['edit'],
 
 
     async created() {
         const response = await QuizApiService.getQuestion(this.question_number);
         this.question = response.data;
+        this.originalImage = this.question.image;
     }
 };
 </script>
@@ -182,6 +201,26 @@ export default {
     color: white;
     text-align: center;
     font-size: 17px;
+}
+
+
+#my_form button{
+    margin: 10px 0px;
+    width: 50%;
+    height: 50px;
+    border-radius: 10px;
+    border: none;
+    background-color: #00b894;
+    color: white;
+    font-size: 20px;
+}
+
+
+.imageedit{
+    height: 200px;
+    aspect-ratio: 16/9;
+    border-radius: 10px;
+    object-fit: cover;
 }
 
 </style>

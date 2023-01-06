@@ -10,12 +10,12 @@
             <QuestionsList @question_number="QuestionNumberHandler"/>
         </div>
     
-        <div v-else-if="currentQuestion != null">
-            <QuestionViewer :question_number="currentQuestion" @question_number="QuestionNumberHandler" @edit="EditHandler"/>
+        <div v-else-if="currentQuestion != null & edit == null">
+            <QuestionAdminView :question_number="currentQuestion" @question_number="QuestionNumberHandler" @edit="EditHandler"/>
         </div>
 
         <div v-else-if="edit != null">
-            <QuestionEdit :question_number="edit"/>
+            <QuestionEdit :question_number="edit" @edit="EditHandler"/>
         </div>
 
     </div>
@@ -30,7 +30,7 @@
 import Login from "@/components/Login.vue";
 import Logout from "@/components/Logout.vue";
 import QuestionsList from "@/components/QuestionsList.vue";
-import QuestionViewer from "@/components/QuestionViewer.vue";
+import QuestionAdminView from "@/components/QuestionAdminView.vue";
 import QuestionEdit from "@/components/QuestionEdit.vue";
 import AdminStorageService from "@/services/AdminStorageService";
 
@@ -50,7 +50,7 @@ export default {
         Login,
         Logout,
         QuestionsList,
-        QuestionViewer,
+        QuestionAdminView,
         QuestionEdit
     },
 
@@ -64,7 +64,6 @@ export default {
         },
 
         EditHandler(edit) {
-            this.currentQuestion = null;
             this.edit = edit;
         }
 
