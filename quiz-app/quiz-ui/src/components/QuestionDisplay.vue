@@ -9,10 +9,19 @@
       <h1>{{ pos }}/{{ tot }} : {{question.title}}</h1>
 
       <h2> {{question.text}}</h2>
+
+      <!-- Time bar -->
+      <div id="timebar">
+        <div></div>
+        <div></div>
+      </div>
       
       <div class="answers">
         <button v-for="(answer, index) in question.possibleAnswers" @click="selectAnswer(index)" :id="index">{{ answer.text }}</button>
       </div>
+
+      
+     
     </div>
 
       
@@ -32,9 +41,26 @@ export default {
     tot: {type: Number}
   },
 
+  data(){
+    return {
+      time: null,
+      myTimer: null,
+      maxtime: 200    }
+  },
+
   methods: {
     selectAnswer(index){
+      // Disable click on all buttons
+      let all = document.getElementsByClassName("answers")[0].children;
+      for (let i = 0; i < all.length; i++) {
+        all[i].style.cursor = "default";
+        all[i].style.pointerEvents = "none";
+      }
 
+      // Stop the timer
+      clearTimeout(this.myTimer);
+
+      
 
       for (let i = 0; i < this.question.possibleAnswers.length; i++) {
         let question_dom = document.getElementById(i);
@@ -58,8 +84,19 @@ export default {
 
       // Wait 1 second before emitting the event
       setTimeout(() => {
+        this.time = this.maxtime;
+        let timebar = document.getElementById("timebar");
+        timebar.children[1].style.width = 100 + "%";
+        this.setColor(100);
         this.$emit('answer-selected', index+1);
         this.resetColors();
+        // Enable click on all buttons
+        let all = document.getElementsByClassName("answers")[0].children;
+        for (let i = 0; i < all.length; i++) {
+          all[i].style.cursor = "pointer";
+          all[i].style.pointerEvents = "auto";
+        }
+
       }, 1000);
 
     },
@@ -89,13 +126,50 @@ export default {
       for (let i = 0; i < all.length; i++) {
         all[i].style.height = max_height + "px";
       }
+    },
+
+ 
+    Timer() {
+      let timebar = document.getElementById("timebar");
+      if (this.time > 0) {
+        clearTimeout(this.myTimer);
+        this.myTimer = setTimeout(() => {
+          this.time -= 1;
+          let percentage = (this.time/this.maxtime) * 100;
+          timebar.children[1].style.width = percentage + "%";
+          this.setColor(percentage);
+          this.Timer();
+        }, 100);
+      }
+      else{
+        
+        this.selectAnswer(-1);
+      }
+    },
+
+
+    setColor(percentage){
+      let timebar = document.getElementById("timebar");
+      if (percentage > 50) {
+        timebar.children[1].style.backgroundColor = "#3bce87";
+      }
+      else if (percentage > 25) {
+        timebar.children[1].style.backgroundColor = "#e8bb27";
+      }
+      else {
+        timebar.children[1].style.backgroundColor = "#ee4266";
+      }
     }
   },
 
   updated(){
     this.resetColors();
+    this.Timer();
   },
 
+  created(){
+    this.time = this.maxtime;
+  },
 
   emits: ['answer-selected']
 
@@ -187,7 +261,27 @@ export default {
 
   }
 }
+
+#timebar > div:first-of-type{
+  width: 100%;
+  height: 10px;
+  background-color: #333333;
+  border-radius: 10px;
+  margin: 20px 0px;
+}
+
+#timebar > div:last-of-type{
+  width: 100%;
+  height: 10px;
+  background-color: #b31a85;
+  border-radius: 10px;
+  position: relative;
   
+  top : -30px;
+
+  transition: 0.3s ease-out;
+
+}
 
 
 
