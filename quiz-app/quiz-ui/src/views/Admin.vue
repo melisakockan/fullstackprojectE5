@@ -1,5 +1,9 @@
 <template>
 
+     <!-- import Font Awesome -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+ 
+
     <!-- Disconnect -->
     <Logout @logged="loggedHandler" v-if="logged"/>
     <Login @logged="loggedHandler" v-else/>
@@ -8,8 +12,8 @@
     <div v-if="logged">
 
         <!-- Create a question -->
+        <button id="addQuestion" @click="create = true" v-if="!create & (currentQuestion == null) & !edit"><i class="fas fa-plus"></i></button>
 
-        <button @click="create = true" v-if="!create & (currentQuestion == null) & !edit">Create a question</button>
 
         <div v-if="create">
             <QuestionEdit :question_number="-1" @edit="EditHandler" @question_created="QuestionNumberHandler"/>
@@ -92,6 +96,35 @@ export default {
     justify-content: flex-end;
     margin: 10px 0px;
     align-items: center;
+}
+
+#addQuestion{
+    font-size: 20px;
+    width: 100px;
+    height: 40px;
+
+    background-color: #4CAF50;
+
+    border: none;
+
+    cursor: pointer;
+    margin: 10px 0px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    margin: auto;
+    
+}
+
+#addQuestion i {
+    color: white;
+    font-size: 20px;
+}
+
+#addQuestion:hover {
+    background-color: #3e8e41;
+    color: white;
 }
 
 </style>

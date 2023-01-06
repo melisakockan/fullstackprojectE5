@@ -26,9 +26,9 @@
             </div>
     
             <div>
-                <button @click="Update" v-if="question_number > 0">Modifier</button>
-                <button @click="Create" v-else>Créer</button>
-                <button @click="$emit('edit', false)">Annuler</button>
+                <button @click="Update" v-if="question_number > 0" class="valider">Modifier</button>
+                <button @click="Create" v-else class="valider">Créer</button>
+                <button @click="$emit('edit', false)" style="background-color: #d63031;">Annuler</button>
             </div>
            
         </form>
@@ -280,14 +280,18 @@ export default {
 
 
 #my_form button{
-    margin: 10px 0px;
-    width: 50%;
+    margin: 10px 10px;
+    width: 30%;
     height: 50px;
     border-radius: 10px;
     border: none;
-    background-color: #00b894;
+    background-color: #02ac62;
     color: white;
     font-size: 20px;
+}
+
+#my_form button:hover{
+    opacity: 0.5;
 }
 
 
@@ -297,5 +301,6 @@ export default {
     border-radius: 10px;
     object-fit: cover;
 }
+
 
 </style>

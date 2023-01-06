@@ -1,14 +1,17 @@
 <template>
 
+    <!-- import Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
  
 
 
     <div id="containerview">
            <!-- Back to Questions List -->
         <div id="actionsview">
-            <button @click="$emit('question_number', null)">Retour</button>
-            <button @click="$emit('edit', true)">Éditer</button>
-            <button @click="deleteQuestion">Supprimer</button>
+
+            <button @click="$emit('question_number', null)" class="fas fa-arrow-left" style="background-color: rgb(0, 0, 201);"></button>
+            <button @click="$emit('edit', true)" class="fas fa-edit" style="background-color: #02ac62;"></button>
+            <button @click="deleteQuestion" class="fas fa-trash" style="background-color: #d63031;"></button>
         </div>
         <div id="questionview" v-if="question != null">
             <p>{{question.position}}</p>
@@ -95,6 +98,13 @@ export default {
     height: 50px;
     border-radius: 10px;
     border: none;
+    font-size: 20px;
+}
+
+#actionsview button:hover{
+    color: white;
+    opacity: 0.5;
+
 }
 
 #questionview{
@@ -144,8 +154,8 @@ export default {
         width: 100%;
     }
 
-    #actionsview{
-        flex-direction: column;
+    #questionview{
+        width: 100%;
     }
 
 

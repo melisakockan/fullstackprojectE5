@@ -140,6 +140,7 @@ h1{
   
     background-color: var(--color-button);
     transition: 0.5s;
+    border: none;
   
   }
   

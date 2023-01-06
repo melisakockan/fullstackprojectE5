@@ -20,7 +20,10 @@ def check_auth(auth):
 		auth_token = auth.split(' ')[1]
 
 		# Si on a reçu un token, on le décode pour vérifier qu'il s'agit du bon
-		decode = decode_token(auth_token)
+		try:
+			decode = decode_token(auth_token)
+		except:
+			return False
 		if decode != 'quiz-app-admin':
 			return False
 		return True
