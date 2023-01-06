@@ -134,6 +134,7 @@ export default {
 .imageview{
     height: 200px;
     aspect-ratio: 16/9;
+    border-radius: 10px;
     object-fit: cover;
 }
 

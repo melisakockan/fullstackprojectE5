@@ -6,13 +6,18 @@
 
     <!-- Admin -->
     <div v-if="logged">
-        <div v-if="currentQuestion == null">
+        <div v-if="currentQuestion == null & edit == null">
             <QuestionsList @question_number="QuestionNumberHandler"/>
         </div>
     
         <div v-else-if="currentQuestion != null">
             <QuestionViewer :question_number="currentQuestion" @question_number="QuestionNumberHandler" @edit="EditHandler"/>
         </div>
+
+        <div v-else-if="edit != null">
+            <QuestionEdit :question_number="edit"/>
+        </div>
+
     </div>
 
     
@@ -26,6 +31,7 @@ import Login from "@/components/Login.vue";
 import Logout from "@/components/Logout.vue";
 import QuestionsList from "@/components/QuestionsList.vue";
 import QuestionViewer from "@/components/QuestionViewer.vue";
+import QuestionEdit from "@/components/QuestionEdit.vue";
 import AdminStorageService from "@/services/AdminStorageService";
 
 
@@ -44,7 +50,8 @@ export default {
         Login,
         Logout,
         QuestionsList,
-        QuestionViewer
+        QuestionViewer,
+        QuestionEdit
     },
 
     methods: {
