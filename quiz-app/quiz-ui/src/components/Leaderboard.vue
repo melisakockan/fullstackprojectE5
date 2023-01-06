@@ -2,7 +2,10 @@
 
    
     <h1>Leaderboard</h1>
-    <h2 v-if="rank != null">Votre rang est : {{rank}}</h2>
+
+    <h2 v-if="registeredScores.length <= 0">Aucune participation</h2>
+
+    <h2 v-if="rank != null & registeredScores.length > 0">Votre rang est : {{rank}}</h2>
     <div v-for="(scoreEntry, index) in registeredScores.slice(0, 10)" v-bind:key="scoreEntry.date" id="scores">
         <p>#{{ index+1 }}</p>
         <p>{{ scoreEntry.playerName }}</p>

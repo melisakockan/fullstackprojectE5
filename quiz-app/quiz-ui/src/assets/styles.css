@@ -137,7 +137,6 @@ h1{
 
     padding: 10px 30px;
     border-radius: 30px;
-    border: none;
   
     background-color: var(--color-button);
     transition: 0.5s;
@@ -145,7 +144,8 @@ h1{
   }
   
   button:hover, #start_new_quiz:hover{
-    opacity: 0.8;
+    background-color: #ffffff;
+    color: var(--color-button);
   }
 
 

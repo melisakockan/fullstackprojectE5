@@ -69,7 +69,6 @@ export default {
   width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-gap: 20px;
 
   justify-items: center;
   align-items: center;
@@ -82,8 +81,11 @@ export default {
   min-height: 60px;
   width: 100%;
   text-transform: none;
-  border-radius: 10px;
+  border-radius: 0px;
   font-size: 1.2em;
+  margin: 0;
+  border: 3px solid #181818;
+
 }
 
 

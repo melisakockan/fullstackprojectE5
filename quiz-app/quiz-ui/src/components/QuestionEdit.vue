@@ -4,10 +4,6 @@
 
 
     <div id="containeredit" v-if="question != null">
-           <!-- Back to Questions List -->
-        <div id="actionsview">
-            <button @click="$emit('edit', false)">Retour</button>
-        </div>
         
         <form id="my_form" @submit.prevent>
             <label for="title">Titre</label>
@@ -29,10 +25,12 @@
                 <input type="text" placeholder="Réponse" v-model="answer.text">
             </div>
     
-    
-            <button @click="Update" v-if="question_number > 0">Modifier</button>
-            <button @click="Create" v-else>Créer</button>
-
+            <div>
+                <button @click="Update" v-if="question_number > 0">Modifier</button>
+                <button @click="Create" v-else>Créer</button>
+                <button @click="$emit('edit', false)">Annuler</button>
+            </div>
+           
         </form>
 
 

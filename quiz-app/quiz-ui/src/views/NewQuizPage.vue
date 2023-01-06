@@ -24,6 +24,11 @@ export default {
   },
   methods: {
     launchNewQuiz() {
+      if (this.username === "") {
+        alert("Veuillez entrer un nom");
+        return;
+      }
+
       participationStorageService.savePlayerName(this.username);
 
       this.$router.push('/questions');
@@ -47,13 +52,34 @@ export default {
   margin: 10px;
 }
 
-#start_form input {
+#start_form input[type="text"] {
+  box-sizing: border-box;
   margin: 10px;
   color: rgb(75, 75, 75);
 
   padding: 10px 30px;
   text-align: center;
   border-radius: 5px;
+
+  font-size: 1.2em;
+
+  width: 300px;
+
+}
+
+#start_form button {
+  box-sizing: border-box;
+  margin: 10px;
+
+  padding: 10px 10px;
+  text-align: center;
+  border-radius: 5px;
+
+  font-size: 1.2em;
+
+  width: 100px;
+
+  border: none;
 }
 
 </style>
