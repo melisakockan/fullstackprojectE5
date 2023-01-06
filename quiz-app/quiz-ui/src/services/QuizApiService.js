@@ -1,5 +1,7 @@
 import axios from "axios";
 
+import AdminStorageService from "@/services/AdminStorageService";
+
 const instance = axios.create({
   baseURL: `${import.meta.env.VITE_API_URL}`,
   json: true
@@ -45,6 +47,11 @@ export default {
 
   getAllQuestions(){
     return this.call("get", "questions/all");
+  },
+
+  deleteQuestion(id){
+    const token = AdminStorageService.getToken();
+    return this.call("delete", `questions/${id}`, null, token);
   }
 
 };

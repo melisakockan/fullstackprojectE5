@@ -5,10 +5,17 @@
     <Login @logged="loggedHandler" v-else/>
 
     <!-- Admin -->
-
     <div v-if="logged">
-        <QuestionsList @question_number="QuestionsListHandler"/>
+        <div v-if="currentQuestion == null">
+            <QuestionsList @question_number="QuestionNumberHandler"/>
+        </div>
+    
+        <div v-else-if="currentQuestion != null">
+            <QuestionViewer :question_number="currentQuestion" @question_number="QuestionNumberHandler" @edit="EditHandler"/>
+        </div>
     </div>
+
+    
 
   
   
@@ -18,6 +25,7 @@
 import Login from "@/components/Login.vue";
 import Logout from "@/components/Logout.vue";
 import QuestionsList from "@/components/QuestionsList.vue";
+import QuestionViewer from "@/components/QuestionViewer.vue";
 import AdminStorageService from "@/services/AdminStorageService";
 
 
@@ -26,14 +34,17 @@ export default {
 
     data() {
         return {
-            logged: null
+            logged: null,
+            currentQuestion: null,
+            edit: null
         }
     },
 
     components: {
         Login,
         Logout,
-        QuestionsList
+        QuestionsList,
+        QuestionViewer
     },
 
     methods: {
@@ -41,8 +52,13 @@ export default {
             this.logged = logged;
         },
 
-        QuestionsListHandler(index) {
-            alert(index);
+        QuestionNumberHandler(index) {
+            this.currentQuestion = index;
+        },
+
+        EditHandler(edit) {
+            this.currentQuestion = null;
+            this.edit = edit;
         }
 
     },
