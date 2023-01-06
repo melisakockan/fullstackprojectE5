@@ -11,9 +11,9 @@
         
         <form id="my_form" @submit.prevent>
             <label for="title">Titre</label>
-            <input type="text" name="title" placeholder="Title" v-model="question.title">
+            <input type="text" name="title" placeholder="Titre" v-model="question.title">
             <label for="text">Texte</label>
-            <input type="text" name="text" placeholder="Text" v-model="question.text">
+            <input type="text" name="text" placeholder="Texte" v-model="question.text">
             <label for="image">Image</label>
             
             <ImageUpload @file-change="FileHandler"/>
@@ -95,12 +95,45 @@ export default {
             }
         },
 
+        isInputMissing(){
+            if(this.question.title == "" || this.question.text == "" || this.question.position == 0 || this.question.image == null){
+                return true;
+            }
+
+            let count = 0;
+
+            for(let i = 0; i < this.question.possibleAnswers.length; i++){
+                if(this.question.possibleAnswers[i].text == ""){
+                    return true;
+                }
+                if(this.question.possibleAnswers[i].isCorrect){
+                    count++;
+                }
+            }
+
+            if (count != 1) {
+                return true;
+            }
+
+            return false;
+
+
+        },
+
         async Update(){
+            if (this.isInputMissing()) {
+                alert("Veuillez remplir tous les champs");
+                return;
+            }
             const response = await QuizApiService.updateQuestion(this.question, this.question_number);
             this.$emit('edit', false);
         },
 
         async Create(){
+            if (this.isInputMissing()) {
+                alert("Veuillez remplir tous les champs");
+                return;
+            }
             const response = await QuizApiService.createQuestion(this.question);
             const id = response.data;
             this.$emit('question_created', id);
