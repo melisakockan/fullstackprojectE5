@@ -2,8 +2,10 @@
 
     <!-- Disconnect -->
     <Logout @logged="loggedHandler" v-if="logged"/>
-
     <Login @logged="loggedHandler" v-else/>
+
+    <!-- Admin -->
+
 
   
   
@@ -36,8 +38,9 @@ export default {
 
     },
 
-    created() {
-        this.logged = AdminStorageService.isTokenValid();
+    async created() {
+        this.logged = await (AdminStorageService.checkToken());
+       
     }
 };
 </script>

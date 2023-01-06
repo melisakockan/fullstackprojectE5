@@ -1,3 +1,5 @@
+import quizApiService from "@/services/QuizApiService";
+
 export default {
     removeToken() {
       window.localStorage.removeItem("token");
@@ -19,5 +21,17 @@ export default {
       }
 
       return false;
+    },
+
+    async checkToken() {
+      const response = await quizApiService.call("get", "checktoken", null, this.getToken());
+
+      if (response.status === 200) {
+        return true;
+      } 
+      else {
+        return false;
+      }
     }
+
   };

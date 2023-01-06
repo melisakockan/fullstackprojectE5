@@ -254,5 +254,17 @@ def rebuild_db():
 				return 'Error when rebuilding DB', 400
 
 
+@app.route('/checktoken', methods=['POST', 'GET'])
+def check_login():
+	# On Récupère le token envoyé en paramètre
+	auth = request.headers.get('Authorization')
+
+	if not check_auth(auth):
+		return 'Unauthorized', 401
+
+	else:
+		return 'OK', 200
+
+
 if __name__ == "__main__":
     app.run(debug=True)
