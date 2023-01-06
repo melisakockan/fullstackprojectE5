@@ -223,3 +223,6 @@ class Database:
         query = "CREATE TABLE IF NOT EXISTS participations (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT, player_name TEXT, score INTEGER)"
         self.cur.execute(query)
         self.con.commit()
+
+
+    

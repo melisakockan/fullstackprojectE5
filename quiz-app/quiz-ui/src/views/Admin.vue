@@ -6,6 +6,9 @@
 
     <!-- Admin -->
 
+    <div v-if="logged">
+        <QuestionsList @question_number="EditHandler"/>
+    </div>
 
   
   
@@ -14,6 +17,7 @@
 <script>
 import Login from "@/components/Login.vue";
 import Logout from "@/components/Logout.vue";
+import QuestionsList from "@/components/QuestionsList.vue";
 import AdminStorageService from "@/services/AdminStorageService";
 
 
@@ -28,13 +32,18 @@ export default {
 
     components: {
         Login,
-        Logout
+        Logout,
+        QuestionsList
     },
 
     methods: {
         loggedHandler(logged) {
             this.logged = logged;
         },
+
+        EditHandler(index) {
+            alert(index);
+        }
 
     },
 

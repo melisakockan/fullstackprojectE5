@@ -41,6 +41,10 @@ export default {
 
   login(password){
     return this.call("post", "login", {"password" : password});
+  },
+
+  getAllQuestions(){
+    return this.call("get", "questions/all");
   }
 
 };

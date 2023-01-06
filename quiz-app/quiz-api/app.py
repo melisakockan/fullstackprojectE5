@@ -131,6 +131,9 @@ def process_questions_2(id):
 			bdd.deleteAllQuestions()
 			return 'All questions deleted', 204
 
+	elif id == "all" and request.method == 'GET':
+		questions = bdd.getAllQuestions()
+		return questions, 200
 
 	# If id is not an integer
 	elif not id.isdigit():
