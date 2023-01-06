@@ -24,7 +24,7 @@ export default {
         return { status: response.status, data: response.data };
       })
       .catch((error) => {
-        console.error(error);
+        return({ status: error.response.status, data: error.response.data })
       });
   },
   getQuizInfo() {
@@ -37,6 +37,10 @@ export default {
 
   addParticipation(name, choices){
     return this.call("post", "participations", {"playerName" : name, "answers" : choices});
+  },
+
+  login(password){
+    return this.call("post", "login", {"password" : password});
   }
 
 };

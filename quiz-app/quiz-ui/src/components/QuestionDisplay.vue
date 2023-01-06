@@ -83,6 +83,7 @@ export default {
   width: 100%;
   text-transform: none;
   border-radius: 10px;
+  font-size: 1.2em;
 }
 
 
