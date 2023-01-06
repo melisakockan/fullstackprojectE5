@@ -8,6 +8,8 @@ from my_sql_process import *
 from Question import *
 from Participation import *
 
+import time
+
 
 bdd = Database('database.db')
 
@@ -44,6 +46,9 @@ def GetQuizInfo():
 
 @app.route('/login', methods=['POST']) #ceci est un nouveau endpoint
 def Authentification():
+    	
+	time.sleep(0.5) # Brute force protection
+
 	payload = request.get_json()
 	if payload is None:
 		return 'Unauthorized', 401
