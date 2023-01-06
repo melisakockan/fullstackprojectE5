@@ -6,24 +6,29 @@
 
     <!-- Admin -->
     <div v-if="logged">
-        <div v-if="currentQuestion == null & edit == null">
+
+        <!-- Create a question -->
+
+        <button @click="create = true" v-if="!create & (currentQuestion == null) & !edit">Create a question</button>
+
+        <div v-if="create">
+            <QuestionEdit :question_number="-1" @edit="EditHandler" @question_created="QuestionNumberHandler"/>
+        </div>
+
+        <div v-else-if="(currentQuestion == null) & !edit">
             <QuestionsList @question_number="QuestionNumberHandler"/>
         </div>
     
-        <div v-else-if="currentQuestion != null & edit == null">
+        <div v-else-if="(currentQuestion != null) & !edit">
             <QuestionAdminView :question_number="currentQuestion" @question_number="QuestionNumberHandler" @edit="EditHandler"/>
         </div>
 
-        <div v-else-if="edit != null">
-            <QuestionEdit :question_number="edit" @edit="EditHandler"/>
+        <div v-else-if="edit">
+            <QuestionEdit :question_number="currentQuestion" @edit="EditHandler"/>
         </div>
 
     </div>
 
-    
-
-  
-  
 </template>
 
 <script>
@@ -42,7 +47,8 @@ export default {
         return {
             logged: null,
             currentQuestion: null,
-            edit: null
+            edit: false,
+            create: false
         }
     },
 
@@ -65,6 +71,7 @@ export default {
 
         EditHandler(edit) {
             this.edit = edit;
+            this.create = false;
         }
 
     },

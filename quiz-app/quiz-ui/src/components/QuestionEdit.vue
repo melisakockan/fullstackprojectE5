@@ -6,7 +6,7 @@
     <div id="containeredit" v-if="question != null">
            <!-- Back to Questions List -->
         <div id="actionsview">
-            <button @click="$emit('edit', null)">Retour</button>
+            <button @click="$emit('edit', false)">Retour</button>
         </div>
         
         <form id="my_form" @submit.prevent>
@@ -30,7 +30,9 @@
             </div>
     
     
-            <button @click="">Modifier</button>
+            <button @click="Update" v-if="question_number > 0">Modifier</button>
+            <button @click="Create" v-else>Créer</button>
+
         </form>
 
 
@@ -91,17 +93,59 @@ export default {
             else{
                 this.question.image = file;
             }
+        },
+
+        async Update(){
+            const response = await QuizApiService.updateQuestion(this.question, this.question_number);
+            this.$emit('edit', false);
+        },
+
+        async Create(){
+            const response = await QuizApiService.createQuestion(this.question);
+            const id = response.data;
+            this.$emit('question_created', id);
+            this.$emit('edit', false);
+
         }
      
     },
 
-    emits: ['edit'],
+    emits: ['edit', 'question_created'],
 
 
     async created() {
-        const response = await QuizApiService.getQuestion(this.question_number);
-        this.question = response.data;
-        this.originalImage = this.question.image;
+        if (this.question_number > 0) {
+            const response = await QuizApiService.getQuestion(this.question_number);
+            this.question = response.data;
+            this.originalImage = this.question.image;
+        }
+        else{
+            this.question = {
+                title: "",
+                text: "",
+                image: null,
+                position: 0,
+                possibleAnswers: [
+                    {
+                        text: "",
+                        isCorrect: false
+                    },
+                    {
+                        text: "",
+                        isCorrect: false
+                    },
+                    {
+                        text: "",
+                        isCorrect: false
+                    },
+                    {
+                        text: "",
+                        isCorrect: false
+                    }
+                ]
+            }
+        }
+      
     }
 };
 </script>

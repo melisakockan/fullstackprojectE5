@@ -33,8 +33,8 @@ export default {
     return this.call("get", "quiz-info");
 
   },
-  getQuestion(position) {
-    return this.call("get", `questions/${position}`);
+  getQuestion(id) {
+    return this.call("get", `questions/${id}`);
   },
 
   addParticipation(name, choices){
@@ -52,6 +52,25 @@ export default {
   deleteQuestion(id){
     const token = AdminStorageService.getToken();
     return this.call("delete", `questions/${id}`, null, token);
+  },
+
+  addQuestion(question){
+    const token = AdminStorageService.getToken();
+    return this.call("post", "questions", question, token);
+  },
+
+  updateQuestion(question, id){
+    const token = AdminStorageService.getToken();
+    return this.call("put", `questions/${id}`, question, token);
+  },
+
+  getQuestionByPosition(position){
+    return this.call("get", `questions?position=${position}`);
+  },
+
+  createQuestion(question){
+    const token = AdminStorageService.getToken();
+    return this.call("post", "questions", question, token);
   }
 
 };

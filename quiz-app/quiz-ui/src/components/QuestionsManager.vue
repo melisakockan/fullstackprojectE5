@@ -40,7 +40,7 @@ export default {
         },
 
         async loadQuestionByPosition(position) {
-            const question = await quizApiService.getQuestion(position);
+            const question = await quizApiService.getQuestionByPosition(position);
             this.currentQuestion = question["data"];
         },
 

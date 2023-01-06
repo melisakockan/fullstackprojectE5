@@ -177,7 +177,7 @@ class Database:
         self.con.commit()
 
     def getAllQuestions(self):
-        query = "SELECT * FROM questions"
+        query = "SELECT * FROM questions ORDER BY position ASC"
         self.cur.execute(query)
         questions = self.cur.fetchall()
 

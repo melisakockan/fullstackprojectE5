@@ -7,7 +7,7 @@
            <!-- Back to Questions List -->
         <div id="actionsview">
             <button @click="$emit('question_number', null)">Retour</button>
-            <button @click="$emit('edit', question_number)">Éditer</button>
+            <button @click="$emit('edit', true)">Éditer</button>
             <button @click="deleteQuestion">Supprimer</button>
         </div>
         <div id="questionview" v-if="question != null">
