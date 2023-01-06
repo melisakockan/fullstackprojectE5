@@ -18,7 +18,11 @@ class Database:
         self.cur.execute(query, (question.position, question.title, question.text, question.image))
         self.con.commit()
 
-        return self.cur.lastrowid
+        id = self.cur.lastrowid
+
+        self.correctPositions();
+
+        return id
 
     def addAnswer(self, answer, question_id):
         query = "INSERT INTO answers (question_id, text, is_correct) VALUES (?, ?, ?)"
@@ -91,11 +95,13 @@ class Database:
         query = "DELETE FROM questions WHERE id = ?"
         self.cur.execute(query, (id,))
         self.con.commit()
+        self.correctPositions();
 
     def updateQuestion(self, question, id):
         query = "UPDATE questions SET position = ?, title = ?, text = ?, image = ? WHERE id = ?"
         self.cur.execute(query, (question.position, question.title, question.text, question.image, id))
         self.con.commit()
+        self.correctPositions();
 
     def deleteAllAnswers(self):
         query = "DELETE FROM answers"
@@ -107,6 +113,7 @@ class Database:
         self.cur.execute(query)
         self.con.commit()
         self.deleteAllAnswers()
+        self.correctPositions();
 
     def offsetPosition(self, position):
         query = "UPDATE questions SET position = position + 1 WHERE position >= ?"
@@ -225,4 +232,16 @@ class Database:
         self.con.commit()
 
 
-    
+    def correctPositions(self):
+        print("correcting positions");
+        query = "SELECT id FROM questions ORDER BY position"
+        self.cur.execute(query)
+        ids = self.cur.fetchall()
+
+        if ids is None:
+            return None
+
+        for i in range(len(ids)):
+            query = "UPDATE questions SET position = ? WHERE id = ?"
+            self.cur.execute(query, (i+1, ids[i][0]))
+            self.con.commit()
