@@ -23,15 +23,18 @@ export default {
         }
     },
 
+    emits: ['logged'],
+
     methods: {
         async connect() {
             const response = await quizApiService.login(this.password);
             if (response.status === 200) {
-                AdminStorageService.setToken(response.data.token);
-                alert("Logged !");
+                AdminStorageService.saveToken(response.data.token);
+                this.$emit('logged', true)
             }
             else{
                 alert("Mot de passe incorrect");
+                this.$emit('logged', false);
             }
         }
     }

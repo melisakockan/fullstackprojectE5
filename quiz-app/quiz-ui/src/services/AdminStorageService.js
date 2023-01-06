@@ -1,6 +1,6 @@
 export default {
-    clear() {
-      window.localStorage.clear();
+    removeToken() {
+      window.localStorage.saveToken(null);
     },
     
     saveToken(token) {
