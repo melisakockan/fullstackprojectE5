@@ -1,12 +1,9 @@
 <template>
 
     <!-- Disconnect -->
-    <div v-show="logged" id="disconnect">
-        <button @click="disconnect">Se déconnecter</button>
-    </div>
-    
+    <Logout @logged="loggedHandler" v-if="logged"/>
 
-    <Login @logged="loggedHandler" v-show="!logged"/>
+    <Login @logged="loggedHandler" v-else/>
 
   
   
@@ -14,6 +11,7 @@
 
 <script>
 import Login from "@/components/Login.vue";
+import Logout from "@/components/Logout.vue";
 import AdminStorageService from "@/services/AdminStorageService";
 
 
@@ -27,7 +25,8 @@ export default {
     },
 
     components: {
-        Login
+        Login,
+        Logout
     },
 
     methods: {
@@ -35,10 +34,6 @@ export default {
             this.logged = logged;
         },
 
-        disconnect() {
-            this.logged = false;
-            AdminStorageService.removeToken();
-        }
     }
 };
 </script>
