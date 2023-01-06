@@ -1,6 +1,6 @@
 export default {
     removeToken() {
-      this.saveToken(null);
+      window.localStorage.removeItem("token");
     },
     
     saveToken(token) {
@@ -8,6 +8,16 @@ export default {
     },
   
     getToken() {
-      window.localStorage.getItem("token");
+      return window.localStorage.getItem("token");
+    },
+
+    isTokenValid() {
+      if (localStorage.hasOwnProperty("token") == true) {
+          if (this.getToken() != null){
+            return true;
+          }
+      }
+
+      return false;
     }
   };

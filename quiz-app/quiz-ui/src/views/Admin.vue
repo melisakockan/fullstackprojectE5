@@ -20,7 +20,7 @@ export default {
 
     data() {
         return {
-            logged: false
+            logged: null
         }
     },
 
@@ -34,6 +34,10 @@ export default {
             this.logged = logged;
         },
 
+    },
+
+    created() {
+        this.logged = AdminStorageService.isTokenValid();
     }
 };
 </script>
