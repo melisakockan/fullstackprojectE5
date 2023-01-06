@@ -11,13 +11,9 @@
       <h2> {{question.text}}</h2>
       
       <div class="answers">
-        <button v-for="(answer, index) in question.possibleAnswers"  @click="$emit('answer-selected', index+1)">{{ answer.text }}</button>
+        <button v-for="(answer, index) in question.possibleAnswers" @click="selectAnswer(index)" :id="index">{{ answer.text }}</button>
       </div>
     </div>
-
-    
-
-
 
       
   </div>
@@ -35,6 +31,71 @@ export default {
     pos: {type: Number},
     tot: {type: Number}
   },
+
+  methods: {
+    selectAnswer(index){
+
+
+      for (let i = 0; i < this.question.possibleAnswers.length; i++) {
+        let question_dom = document.getElementById(i);
+        if (i == index  && this.question.possibleAnswers[i].isCorrect) {
+          question_dom.style.backgroundColor = "#3bce87";
+          question_dom.style.color = "white";
+        } 
+        else if (i == index && !this.question.possibleAnswers[i].isCorrect) {
+          question_dom.style.backgroundColor = "#ee4266";
+          question_dom.style.color = "white";
+        }
+        else if (this.question.possibleAnswers[i].isCorrect) {
+          question_dom.style.backgroundColor = "#3bce87";
+          question_dom.style.color = "white";
+        }
+        else {
+          question_dom.style.backgroundColor = "#333333";
+          question_dom.style.color = "black";
+        }
+      }
+
+      // Wait 1 second before emitting the event
+      setTimeout(() => {
+        this.$emit('answer-selected', index+1);
+        this.resetColors();
+      }, 1000);
+
+    },
+
+    resetColors(){
+      let q1 = document.getElementById(0);
+      let q2 = document.getElementById(1);
+      let q3 = document.getElementById(2);
+      let q4 = document.getElementById(3);
+      let all = [q1, q2, q3, q4];
+
+      q1.style.backgroundColor = "#b31a85";
+      q2.style.backgroundColor = "#ee4266";
+      q3.style.backgroundColor = "#e8bb27";
+      q4.style.backgroundColor = "#3bce87";
+
+      let max_height = 0;
+      
+      for (let i = 0; i < all.length; i++) {
+        all[i].style.color = "white";
+
+        if (all[i].offsetHeight > max_height) {
+          max_height = all[i].offsetHeight;
+        }
+      }
+
+      for (let i = 0; i < all.length; i++) {
+        all[i].style.height = max_height + "px";
+      }
+    }
+  },
+
+  updated(){
+    this.resetColors();
+  },
+
 
   emits: ['answer-selected']
 
@@ -73,6 +134,7 @@ export default {
   justify-items: center;
   align-items: center;
   
+  grid-gap: 6px;
 
   
 }
@@ -84,7 +146,8 @@ export default {
   border-radius: 0px;
   font-size: 1.2em;
   margin: 0;
-  border: 3px solid #181818;
+
+  border: none;
 
 }
 
@@ -98,26 +161,6 @@ export default {
   background-repeat: no-repeat;
 
   border-radius: 30px;
-}
-
-.answers button:nth-of-type(1){
-  background-color: #b31a85;
-  color: white;
-}
-
-.answers button:nth-of-type(2){
-  background-color: #ee4266;
-  color: white;
-}
-
-.answers button:nth-of-type(3){
-  background-color: #e8bb27;
-  color: white;
-}
-
-.answers button:nth-of-type(4){
-  background-color: #3bce87;
-  color: white;
 }
 
 

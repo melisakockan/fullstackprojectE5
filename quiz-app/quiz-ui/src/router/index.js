@@ -3,7 +3,6 @@ import HomePage from '../views/HomePage.vue'
 import NewQuizPage from '../views/NewQuizPage.vue'
 import Questions from '../views/Questions.vue'
 import Score from '../views/ScorePage.vue'
-import Joueur from '../views/Joueur.vue'
 import Admin from '../views/Admin.vue'
 
 const router = createRouter({
