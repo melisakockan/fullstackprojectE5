@@ -276,6 +276,50 @@ def check_login():
 	else:
 		return 'OK', 200
 
+# SOUND MANAGEMENT
+
+@app.route('/themes/<name>', methods=['GET'])
+def process_themes(name):
+	if name == "all":
+		return bdd.getAllThemes(), 200
+	
+	else:
+		res =  bdd.getTheme(name)
+		if res is None:
+			return 'Theme does not exist', 404
+		else:
+			return res, 200
+
+@app.route('/themes', methods=['POST'])
+def add_sound():
+	auth = request.headers.get('Authorization')
+
+	if not check_auth(auth):
+		return 'Unauthorized', 401
+
+	else:
+		try: 
+			name = request.get_json()['name']
+			data = request.	get_json()['data']
+			volume = request.get_json()['volume']
+
+		except: 
+			return "Missing parameter", 404
+			
+		return bdd.addTheme(name, data, volume), 200
+    
+@app.route('/themes/<name>', methods=['DELETE'])
+def delete_sound(name):
+	auth = request.headers.get('Authorization')
+
+	if not check_auth(auth):
+		return 'Unauthorized', 401
+
+	else:
+		bdd.deleteTheme(name)
+		return "Deleted", 200
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

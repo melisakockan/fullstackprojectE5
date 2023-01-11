@@ -71,6 +71,10 @@ export default {
   createQuestion(question){
     const token = AdminStorageService.getToken();
     return this.call("post", "questions", question, token);
+  },
+
+  getTheme(name){
+    return this.call('get', `themes/${name}`);
   }
 
 };

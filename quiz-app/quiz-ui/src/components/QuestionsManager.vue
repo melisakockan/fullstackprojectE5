@@ -59,7 +59,8 @@ export default {
         const quizInfo = await quizApiService.getQuizInfo();
 
         this.totalNumberOfQuestion = (quizInfo["data"]["size"]);
-        
+
+
 
     },
   
@@ -70,4 +71,8 @@ export default {
     }
 
 }
+
+
+
+
 </script>

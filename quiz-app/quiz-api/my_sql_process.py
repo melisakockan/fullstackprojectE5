@@ -219,6 +219,8 @@ class Database:
         self.cur.execute(query)
         query = "DROP TABLE IF EXISTS participations"
         self.cur.execute(query)
+        query = "DROP TABLE IF EXISTS themes"
+        self.cur.execute(query)
         self.con.commit()
 
     def createDB(self):
@@ -228,6 +230,8 @@ class Database:
         query = "CREATE TABLE IF NOT EXISTS answers (id INTEGER PRIMARY KEY AUTOINCREMENT, question_id INTEGER, text TEXT, is_correct INTEGER)"
         self.cur.execute(query)
         query = "CREATE TABLE IF NOT EXISTS participations (id INTEGER PRIMARY KEY AUTOINCREMENT, date TEXT, player_name TEXT, score INTEGER)"
+        self.cur.execute(query)
+        query = "CREATE TABLE IF NOT EXISTS themes (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, data TEXT, volume FLOAT)"
         self.cur.execute(query)
         self.con.commit()
 
@@ -245,3 +249,66 @@ class Database:
             query = "UPDATE questions SET position = ? WHERE id = ?"
             self.cur.execute(query, (i+1, ids[i][0]))
             self.con.commit()
+
+
+    # SOUND MANAGEMENT
+
+    def addTheme(self, name, data, volume):
+        if self.ThemeExists(name):
+            self.deleteTheme(name)
+
+        query = "INSERT INTO themes (name, data, volume) VALUES (?, ?, ?)"
+        self.cur.execute(query, (name, data, volume))
+        self.con.commit()
+
+        return self.getTheme(name)
+
+    def DefaultExists(self):
+        query = "SELECT * FROM themes WHERE name = ?"
+        self.cur.execute(query, ("default",))
+        theme = self.cur.fetchone()
+
+        return theme is not None
+    
+    def ThemeExists(self, name):
+        query = "SELECT * FROM themes WHERE name = ?"
+        self.cur.execute(query, (name,))
+        theme = self.cur.fetchone()
+
+        return theme is not None
+
+    def getTheme(self, name):
+
+        query = "SELECT * FROM themes WHERE name = ?"
+        self.cur.execute(query, (name,))
+        theme = self.cur.fetchone()
+
+        if theme is None:
+            if self.DefaultExists():
+                return self.getTheme("default")
+            else:
+                return None
+
+        return self.theme_to_json(theme)
+
+    def theme_to_json(self, theme):
+        return {
+            "name": theme[1],
+            "data": theme[2],
+            "volume": theme[3]
+        }
+
+    def getAllThemes(self):
+        query = "SELECT * FROM themes"
+        self.cur.execute(query)
+        themes = self.cur.fetchall()
+
+        if themes is None:
+            return []
+
+        return [self.theme_to_json(theme) for theme in themes]
+
+    def deleteTheme(self, name):
+        query = "DELETE FROM themes WHERE name = ?"
+        self.cur.execute(query, (name,))
+        self.con.commit()

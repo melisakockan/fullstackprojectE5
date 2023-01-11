@@ -20,6 +20,8 @@
         <button v-for="(answer, index) in question.possibleAnswers" @click="selectAnswer(index)" :id="index">{{ answer.text }}</button>
       </div>
 
+      <audio id="theme_player" src=""></audio>
+
       
      
     </div>
@@ -31,6 +33,7 @@
 </template>
 
 <script>
+  import soundManager from "@/services/SoundManager";
 
 export default {
   props: {
@@ -60,6 +63,14 @@ export default {
       // Stop the timer
       clearTimeout(this.myTimer);
 
+      // Play sound
+      if (index != -1 && this.question.possibleAnswers[index].isCorrect){
+        soundManager.playCorrect();
+      }
+      else{
+        soundManager.playWrong();
+      }
+
       
 
       for (let i = 0; i < this.question.possibleAnswers.length; i++) {
@@ -86,6 +97,7 @@ export default {
       setTimeout(() => {
         this.time = this.maxtime;
         let timebar = document.getElementById("timebar");
+        if (timebar == null) return;
         timebar.children[1].style.width = 100 + "%";
         this.setColor(100);
         this.$emit('answer-selected', index+1);
@@ -98,6 +110,7 @@ export default {
         }
 
       }, 1000);
+
 
     },
 
@@ -127,6 +140,7 @@ export default {
  
     Timer() {
       let timebar = document.getElementById("timebar");
+      if (timebar == null) return;
       if (this.time > 0) {
         clearTimeout(this.myTimer);
         this.myTimer = setTimeout(() => {
@@ -146,6 +160,7 @@ export default {
 
     setColor(percentage){
       let timebar = document.getElementById("timebar");
+      if (timebar == null) return;
       if (percentage > 50) {
         timebar.children[1].style.backgroundColor = "#3bce87";
       }
@@ -165,7 +180,33 @@ export default {
 
   created(){
     this.time = this.maxtime;
+
+    let audio = document.getElementById("my_player");
+
+    
   },
+
+  
+
+  watch: {
+    question: async function(){
+      if (typeof this.question.title == 'undefined' || typeof this.question.position == 'undefined') return;
+      var title  = this.question.title;
+      if (this.question.position == 1){
+        document.getElementById('my_player').addEventListener("ended",function() {
+          soundManager.playTheme(title);
+      
+        }, { once: true});
+      }
+    
+
+      if (this.question.position > 1){
+        await soundManager.playTheme(title);
+      }
+      
+    }
+  },
+
 
   emits: ['answer-selected']
 

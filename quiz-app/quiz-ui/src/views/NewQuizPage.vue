@@ -1,7 +1,7 @@
 <template>
   <h1>Démarrez le quiz</h1>
 
-  <form id="start_form">
+  <form id="start_form" @submit.prevent>
     <div>
       <input type="text" v-model="username" id="myusername" placeholder="Entrez votre nom">
     </div>
@@ -16,6 +16,8 @@
 <script>
 import quizApiService from "@/services/QuizApiService";
 import participationStorageService from "@/services/ParticipationStorageService";
+import soundManager from "@/services/SoundManager";
+
 export default {
   data() {
     return {
@@ -28,10 +30,18 @@ export default {
         alert("Veuillez entrer un nom");
         return;
       }
+      soundManager.playStart();
 
       participationStorageService.savePlayerName(this.username);
 
-      this.$router.push('/questions');
+      var Timer = setTimeout(() => {
+       
+        this.$router.push('/questions');
+        clearTimeout(Timer);
+
+      }, 1300);
+
+
     }
 
   }
