@@ -8,6 +8,7 @@
 import QuestionDisplay from '@/components/QuestionDisplay.vue';
 import quizApiService from "@/services/QuizApiService";
 import participationStorageService from "@/services/ParticipationStorageService";
+import soundManager from "@/services/SoundManager";
 
 
 export default {
@@ -49,6 +50,7 @@ export default {
             let result = await quizApiService.addParticipation(playerName, this.choices);
             let score = result["data"]["score"];
             participationStorageService.saveParticipationScore(score);
+            soundManager.playEnd();
             this.$router.push("/score");
         }
     },

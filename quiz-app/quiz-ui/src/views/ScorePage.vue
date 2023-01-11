@@ -3,6 +3,8 @@
   <Score/> 
 
   <Leaderboard/>
+
+  <audio id="end_player"></audio>
   
 </template>
 
@@ -17,7 +19,7 @@ export default {
     {
         Score,
         Leaderboard
-    }
+    },
 
 }
 </script>

@@ -99,6 +99,10 @@ export default {
         this.playSound('/sounds/wrong.mp3', 0.5);
     },
 
+    playEnd(){
+        this.playSound('/sounds/end.mp3', 0.5);
+    },
+
     playSoundB64(sound, volume = 1, player = "theme_player", loop = false){
 
 
