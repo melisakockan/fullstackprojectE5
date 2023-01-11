@@ -4,7 +4,7 @@
         <p>{{question.position}}</p>
         <p>{{question.title}}</p>
         <p>{{question.text}}</p>
-        <button @click="emitQuestionNumber(question.id)">Voir</button>
+        <button @click="emitQuestionNumber(question.id)" class="fas fa-eye"></button>
     </div>
     
   
@@ -57,6 +57,17 @@ export default {
     text-align: center;
 }
 
+#question button{
+    border: none;
+    color: white;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+#question button:hover{
+    color: #0077b6;
+}
+
 @media screen and (max-width: 800px) {
     #question{
         width: 100%;
@@ -64,7 +75,14 @@ export default {
         grid-template-rows: 1fr 1fr 1fr 1fr;
         grid-gap: 0px;
     }
+
+
+    #question button{
+        width: 30%;
+    }
+
+
 }
-    
+
 
 </style>

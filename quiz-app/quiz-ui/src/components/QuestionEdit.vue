@@ -26,9 +26,9 @@
             </div>
     
             <div>
-                <button @click="Update" v-if="question_number > 0" class="valider">Modifier</button>
-                <button @click="Create" v-else class="valider">Créer</button>
-                <button @click="$emit('edit', false)" style="background-color: #d63031;">Annuler</button>
+                <button @click="Update" v-if="question_number > 0" class="valider fas fa-check"></button>
+                <button @click="Create" v-else class="valide fas fa-check"></button>
+                <button @click="$emit('edit', false)" style="background-color: #d63031;" class="fas fa-times"></button>
             </div>
            
         </form>
@@ -287,7 +287,7 @@ export default {
     border: none;
     background-color: #02ac62;
     color: white;
-    font-size: 20px;
+    font-size: 30px;
 }
 
 #my_form button:hover{
@@ -300,6 +300,25 @@ export default {
     aspect-ratio: 16/9;
     border-radius: 10px;
     object-fit: cover;
+}
+
+
+@media screen and (max-width: 600px) {
+    #my_form input{
+        width: 80%;
+    }
+
+    #my_form > label{
+        width: 80%;
+    }
+
+    #my_form > div{
+        width: 80%;
+    }
+
+    #my_form button{
+        width: 80%;
+    }
 }
 
 
