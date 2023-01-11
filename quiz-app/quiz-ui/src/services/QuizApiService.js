@@ -75,6 +75,29 @@ export default {
 
   getTheme(name){
     return this.call('get', `themes/${name}`);
+  },
+
+  getThemeById(id){
+    return this.call('get', `themes/id/${id}`);
+  },
+
+  getAllThemes(){
+    return this.call('get', 'themes/all');
+  },
+
+  updateTheme(theme){
+    const token = AdminStorageService.getToken();
+    return this.call('put', `themes/${theme.id}`, theme, token);
+  },
+
+  createTheme(theme){
+    const token = AdminStorageService.getToken();
+    return this.call('post', `themes`, theme, token);
+  },
+
+  deleteTheme(id){
+    const token = AdminStorageService.getToken();
+    return this.call('delete', `themes/${id}`, null, token);
   }
 
 };

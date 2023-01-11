@@ -308,16 +308,52 @@ def add_sound():
 			
 		return bdd.addTheme(name, data, volume), 200
     
-@app.route('/themes/<name>', methods=['DELETE'])
-def delete_sound(name):
+@app.route('/themes/<id>', methods=['DELETE'])
+def delete_sound(id):
 	auth = request.headers.get('Authorization')
 
 	if not check_auth(auth):
 		return 'Unauthorized', 401
 
 	else:
-		bdd.deleteTheme(name)
+		bdd.deleteTheme(id)
 		return "Deleted", 200
+
+@app.route('/themes/<id>', methods=['PUT'])
+def update_sound(id):
+	auth = request.headers.get('Authorization')
+
+	if not check_auth(auth):
+		return 'Unauthorized', 401
+
+	else:
+		try: 
+			data = request.get_json()['data']
+			volume = request.get_json()['volume']
+			name = request.get_json()['name']
+
+		except: 
+			return "Missing parameter", 404
+
+		res = bdd.updateTheme(id, name, volume, data)
+			
+		return res, 200
+
+@app.route('/themes/id/<id>', methods=['GET'])
+def get_sound_by_id(id):
+    	
+	res = bdd.getThemeById(id)
+
+	if res is None:
+		return 'Theme does not exist', 404
+
+	else:
+		return res, 200
+
+
+
+
+
 
 
 

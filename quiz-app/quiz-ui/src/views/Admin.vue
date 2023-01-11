@@ -12,18 +12,29 @@
     <div v-if="logged">
 
         <!-- Create a question -->
-        <button id="addQuestion" @click="create = true" v-if="!create & (currentQuestion == null) & !edit"><i class="fas fa-plus"></i></button>
+        <button id="addQuestion" @click="create = true" v-if="!create & (currentQuestion == null) & !edit & !sound"><i class="fas fa-plus"></i></button>
+
+        <!-- Themes -->
+        <button id="manageThemes" @click="sound = true" v-if="!create & (currentQuestion == null) & !edit & !sound"><i class="fas fa-music"></i></button>
+
+        <div v-if="sound & theme_id == null">
+            <SoundList @back="sound = false" @theme="themeHandler"/>
+        </div>
+
+        <div v-else-if="sound & theme_id != null">
+            <SoundAdminView :theme_id="theme_id" @back="theme_id = null" @theme="theme_id = null"/>
+        </div>
 
 
         <div v-if="create">
             <QuestionEdit :question_number="-1" @edit="EditHandler" @question_created="QuestionNumberHandler"/>
         </div>
 
-        <div v-else-if="(currentQuestion == null) & !edit">
+        <div v-else-if="(currentQuestion == null) & !edit & !sound">
             <QuestionsList @question_number="QuestionNumberHandler"/>
         </div>
     
-        <div v-else-if="(currentQuestion != null) & !edit">
+        <div v-else-if="(currentQuestion != null) & !edit ">
             <QuestionAdminView :question_number="currentQuestion" @question_number="QuestionNumberHandler" @edit="EditHandler"/>
         </div>
 
@@ -42,6 +53,8 @@ import QuestionsList from "@/components/QuestionsList.vue";
 import QuestionAdminView from "@/components/QuestionAdminView.vue";
 import QuestionEdit from "@/components/QuestionEdit.vue";
 import AdminStorageService from "@/services/AdminStorageService";
+import SoundList from "@/components/SoundList.vue";
+import SoundAdminView from "@/components/SoundAdminView.vue";
 
 
 export default {
@@ -52,7 +65,9 @@ export default {
             logged: null,
             currentQuestion: null,
             edit: false,
-            create: false
+            create: false,
+            sound: false,
+            theme_id: null
         }
     },
 
@@ -61,7 +76,9 @@ export default {
         Logout,
         QuestionsList,
         QuestionAdminView,
-        QuestionEdit
+        QuestionEdit,
+        SoundList,
+        SoundAdminView
     },
 
     methods: {
@@ -76,6 +93,10 @@ export default {
         EditHandler(edit) {
             this.edit = edit;
             this.create = false;
+        },
+
+        themeHandler(theme_id) {
+            this.theme_id = theme_id;
         }
 
     },
@@ -98,7 +119,8 @@ export default {
     align-items: center;
 }
 
-#addQuestion{
+#addQuestion, #manageThemes{
+    box-sizing: border-box;
     font-size: 20px;
     width: 100px;
     height: 40px;
@@ -115,6 +137,18 @@ export default {
 
     margin: auto;
     
+}
+
+#manageThemes{
+    margin-top: 20px;
+    background-color: #af4c8b;
+    font-size: 20px;
+    color: white;
+}
+
+#manageThemes:hover {
+    background-color: #893e8e;
+    color: white;
 }
 
 #addQuestion i {

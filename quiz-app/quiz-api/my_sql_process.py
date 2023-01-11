@@ -291,12 +291,34 @@ class Database:
 
         return self.theme_to_json(theme)
 
-    def theme_to_json(self, theme):
-        return {
-            "name": theme[1],
-            "data": theme[2],
-            "volume": theme[3]
-        }
+
+    def getThemeById(self, id):
+        query = "SELECT * FROM themes WHERE id = ?"
+        self.cur.execute(query, (id,))
+        theme = self.cur.fetchone()
+
+        if theme is None:
+            return None
+
+        return self.theme_to_json(theme)
+
+
+    def theme_to_json(self, theme, data=True):
+        if data:
+            return {
+                "id": theme[0],
+                "name": theme[1],
+                "data": theme[2],
+                "volume": theme[3]
+            }
+
+        else:
+            return {
+                "id": theme[0],
+                "name": theme[1],
+                "volume": theme[3]
+            }
+
 
     def getAllThemes(self):
         query = "SELECT * FROM themes"
@@ -306,9 +328,17 @@ class Database:
         if themes is None:
             return []
 
-        return [self.theme_to_json(theme) for theme in themes]
+        return [self.theme_to_json(theme, data=False) for theme in themes]
 
-    def deleteTheme(self, name):
-        query = "DELETE FROM themes WHERE name = ?"
-        self.cur.execute(query, (name,))
+    def deleteTheme(self, id):
+        query = "DELETE FROM themes WHERE id = ?"
+        self.cur.execute(query, (id,))
         self.con.commit()
+
+
+    def updateTheme(self, id, name, volume, data):
+        query = "UPDATE themes SET name = ?, volume = ?, data = ? WHERE id = ?"
+        self.cur.execute(query, (name, volume, data, id))
+        self.con.commit()
+
+        return self.getThemeById(id)

@@ -106,7 +106,7 @@ export default {
 
         var src = audio.src;
 
-        var new_src = "data:audio/wav;base64," + sound;
+        var new_src = this.formatB64(sound);
 
         if (src == new_src){
             return;
@@ -133,14 +133,38 @@ export default {
         
     },
 
+    encodeName(name){
+        name = name.toLowerCase();
+
+        name = name.split(' ').join('_');
+
+        return name;
+    },
+
+    decodeName(name){
+        name = name.split('_');
+
+        for (var i = 0; i < name.length; i++){
+            name[i] = name[i].charAt(0).toUpperCase() + name[i].slice(1);
+        }
+
+        name = name.join(' ');
+
+        return name;
+
+    },
+
+    formatB64(b64){
+        if (b64.startsWith("data:audio")) return b64;
+        else{
+            return "data:audio/mpeg;base64," + b64;
+        }
+
+    },
 
     async playTheme(theme){
 
-        // To lowercase
-        theme = theme.toLowerCase();
-
-        // Space to underscore
-        theme = theme.split(' ').join('_');
+        theme = this.encodeName(theme);
 
         var response = await quizApiService.getTheme(theme);
         this.playSoundB64(response.data.data, response.data.volume, "theme_player", true);
