@@ -43,26 +43,8 @@ export default {
 
 
         let audio = document.getElementById(player);
-        var src = audio.src;
-        
-        src = src.split('/');
-
-        if (src.length > 0){
-            src = src[src.length - 1];
-        }
-
-        var sound_name = sound.split('/');
-
-        if (sound_name.length > 0){
-            sound_name = sound_name[sound_name.length - 1];
-        }
-        
-
-
-        if (src == sound_name && player == "theme_player"){
-            return;
-        }
         audio.pause();
+
         audio.src = sound;
         if (this.getSoundPreference() == 'false'){
             audio.volume = 0;
@@ -81,26 +63,42 @@ export default {
         }
 
         
+    }, 
+
+    async playClick(player){
+
+        var response = await quizApiService.getSound("click");
+        var new_src = this.formatB64(response.data.data);
+      
+        this.playSound(new_src, response.data.volume);
     },
 
-    playClick(player){
-        this.playSound('/sounds/click_1.wav');
+    async playStart(){
+        var response = await quizApiService.getSound("start");
+        var new_src = this.formatB64(response.data.data);
+      
+        this.playSound(new_src, response.data.volume);
     },
 
-    playStart(){
-        this.playSound('/sounds/start.mp3', 0.5);
+    async playCorrect(){
+        var response = await quizApiService.getSound("correct");
+        var new_src = this.formatB64(response.data.data);
+      
+        this.playSound(new_src, response.data.volume);
     },
 
-    playCorrect(){
-        this.playSound('/sounds/correct.mp3', 0.5);
+    async playWrong(){
+        var response = await quizApiService.getSound("wrong");
+        var new_src = this.formatB64(response.data.data);
+      
+        this.playSound(new_src, response.data.volume);
     },
 
-    playWrong(){
-        this.playSound('/sounds/wrong.mp3', 0.5);
-    },
-
-    playEnd(){
-        this.playSound('/sounds/end.mp3', 0.5);
+    async playEnd(){
+        var response = await quizApiService.getSound("end");
+        var new_src = this.formatB64(response.data.data);
+      
+        this.playSound(new_src, response.data.volume);
     },
 
     playSoundB64(sound, volume = 1, player = "theme_player", loop = false){
@@ -173,5 +171,7 @@ export default {
         var response = await quizApiService.getTheme(theme);
         this.playSoundB64(response.data.data, response.data.volume, "theme_player", true);
     }
+
+    
 
 }

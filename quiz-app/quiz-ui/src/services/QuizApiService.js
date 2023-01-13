@@ -98,6 +98,10 @@ export default {
   deleteTheme(id){
     const token = AdminStorageService.getToken();
     return this.call('delete', `themes/${id}`, null, token);
-  }
+  },
+
+  getSound(name){
+    return this.call('get', `sounds/${name}`);
+  },
 
 };

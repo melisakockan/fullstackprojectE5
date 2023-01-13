@@ -351,6 +351,34 @@ def get_sound_by_id(id):
 		return res, 200
 
 
+@app.route("/sounds/<name>", methods=['GET'])
+def get_sound(name):
+	res = bdd.getSound(name)
+
+	if res is None:
+		return 'Sound does not exist', 404
+
+	else:
+		return res, 200
+
+@app.route("/sounds", methods=['POST'])
+def add_a_sound():
+	auth = request.headers.get('Authorization')
+
+	if not check_auth(auth):
+		return 'Unauthorized', 401
+
+	else:
+		try: 
+			name = request.get_json()['name']
+			data = request.get_json()['data']
+			volume = request.get_json()['volume']
+
+		except: 
+			return "Missing parameter", 404
+			
+		return bdd.addSound(name, data, volume), 200
+
 
 
 

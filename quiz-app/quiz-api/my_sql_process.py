@@ -221,6 +221,8 @@ class Database:
         self.cur.execute(query)
         query = "DROP TABLE IF EXISTS themes"
         self.cur.execute(query)
+        query = "DROP TABLE IF EXISTS sounds"
+        self.cur.execute(query)
         self.con.commit()
 
     def createDB(self):
@@ -233,6 +235,9 @@ class Database:
         self.cur.execute(query)
         query = "CREATE TABLE IF NOT EXISTS themes (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, data TEXT, volume FLOAT)"
         self.cur.execute(query)
+        query = "CREATE TABLE IF NOT EXISTS sounds (id INTEGER PRIMARY KEY AUTOINCREMENT, name TEXT, data TEXT, volume FLOAT)"
+        self.cur.execute(query)
+
         self.con.commit()
 
 
@@ -342,3 +347,45 @@ class Database:
         self.con.commit()
 
         return self.getThemeById(id)
+
+    def sound_to_json(self, sound):
+        return {
+            "id": sound[0],
+            "name": sound[1],
+            "data": sound[2],
+            "volume": sound[3]
+        }
+
+
+    def getSound(self, name):
+        query = "SELECT * FROM sounds WHERE name = ?"
+        self.cur.execute(query, (name,))
+        sound = self.cur.fetchone()
+
+        if sound is None:
+            return None
+
+        return self.sound_to_json(sound)
+       
+
+    def addSound(self, name, data, volume):
+        if self.SoundExists(name):
+            self.deleteSound(name)
+
+        query = "INSERT INTO sounds (name, data, volume) VALUES (?, ?, ?)"
+        self.cur.execute(query, (name, data, volume))
+        self.con.commit()
+
+        return self.getSound(name)
+
+    def SoundExists(self, name):
+        query = "SELECT * FROM sounds WHERE name = ?"
+        self.cur.execute(query, (name,))
+        sound = self.cur.fetchone()
+
+        return sound is not None
+
+    def deleteSound(self, name):
+        query = "DELETE FROM sounds WHERE name = ?"
+        self.cur.execute(query, (name,))
+        self.con.commit()
